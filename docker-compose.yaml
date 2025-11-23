@@ -1,0 +1,231 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: eccom_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - data-pipeline
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Python Order Generator
+  python-generator:
+    build:
+      context: ./python-generator
+      dockerfile: Dockerfile
+    container_name: order-generator
+    environment:
+      DATABASE_URL: postgresql://admin:password@postgres:5432/orders_db
+      GENERATE_INTERVAL: 5  # seconds between order batches
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./python-generator:/app
+    networks:
+      - data-pipeline
+    restart: unless-stopped
+
+  # DBT for transformations
+  dbt:
+    build:
+      context: ./dbt
+      dockerfile: Dockerfile
+    container_name: dbt
+    environment:
+      DBT_PROFILES_DIR: /root/.dbt
+      DATABASE_URL: postgresql://admin:password@postgres:5432/orders_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./dbt:/dbt
+      - ./dbt/profiles.yml:/root/.dbt/profiles.yml
+    networks:
+      - data-pipeline
+    command: ["dbt", "run"]
+
+  # Zookeeper (required for Kafka)
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - data-pipeline
+
+  # Redpanda (Kafka alternative - simpler, no Zookeeper needed)
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:latest
+    container_name: redpanda
+    command:
+      - redpanda
+      - start
+      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr internal://redpanda:9092,external://localhost:19092
+      - --pandaproxy-addr internal://0.0.0.0:8082,external://0.0.0.0:18082
+      - --advertise-pandaproxy-addr internal://redpanda:8082,external://localhost:18082
+      - --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:18081
+      - --rpc-addr redpanda:33145
+      - --advertise-rpc-addr redpanda:33145
+      - --smp 1
+      - --memory 1G
+      - --mode dev-container
+      - --default-log-level=info
+    ports:
+      - "18081:18081"  # Schema Registry
+      - "18082:18082"  # HTTP Proxy
+      - "19092:19092"  # Kafka API
+      - "9644:9644"    # Admin API
+    networks:
+      - data-pipeline
+    healthcheck:
+      test: ["CMD-SHELL", "rpk cluster health | grep -E 'Healthy:.+true' || exit 1"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+
+  # Redpanda Console (UI for Redpanda)
+  redpanda-console:
+    image: docker.redpanda.com/redpandadata/console:latest
+    container_name: redpanda-console
+    environment:
+      KAFKA_BROKERS: redpanda:9092
+      KAFKA_SCHEMAREGISTRY_ENABLED: true
+      KAFKA_SCHEMAREGISTRY_URLS: http://redpanda:8081
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redpanda
+    networks:
+      - data-pipeline
+
+  # Debezium (CDC from Postgres)
+  debezium:
+    image: debezium/connect:2.4
+    container_name: debezium
+    environment:
+      BOOTSTRAP_SERVERS: redpanda:9092
+      GROUP_ID: 1
+      CONFIG_STORAGE_TOPIC: debezium_configs
+      OFFSET_STORAGE_TOPIC: debezium_offsets
+      STATUS_STORAGE_TOPIC: debezium_status
+    ports:
+      - "8083:8083"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redpanda:
+        condition: service_healthy
+    networks:
+      - data-pipeline
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Debezium UI (optional - for easier management)
+  debezium-ui:
+    image: debezium/debezium-ui:2.4
+    container_name: debezium-ui
+    environment:
+      KAFKA_CONNECT_URIS: http://debezium:8083
+    ports:
+      - "8084:8080"
+    depends_on:
+      - debezium
+    networks:
+      - data-pipeline
+
+  # Golang WebSocket Server
+  go-websocket:
+    build:
+      context: ./go-websocket
+      dockerfile: Dockerfile
+    container_name: go-websocket
+    environment:
+      KAFKA_BROKERS: redpanda:9092
+      KAFKA_TOPIC: postgres.public.orders
+      PORT: 8085
+    ports:
+      - "8085:8085"
+    depends_on:
+      redpanda:
+        condition: service_healthy
+      debezium:
+        condition: service_healthy
+    networks:
+      - data-pipeline
+    restart: unless-stopped
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    environment:
+      WEBSOCKET_URL: ws://go-websocket:8085/ws
+      API_URL: http://go-websocket:8085/api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - go-websocket
+    networks:
+      - data-pipeline
+    restart: unless-stopped
+
+  # Init container to set up Debezium connector
+  debezium-init:
+    image: curlimages/curl:latest
+    container_name: debezium-init
+    depends_on:
+      debezium:
+        condition: service_healthy
+    networks:
+      - data-pipeline
+    command: >
+      sh -c "
+        sleep 10 &&
+        curl -i -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' \
+        http://debezium:8083/connectors/ -d '{
+          \"name\": \"postgres-connector\",
+          \"config\": {
+            \"connector.class\": \"io.debezium.connector.postgresql.PostgresConnector\",
+            \"database.hostname\": \"postgres\",
+            \"database.port\": \"5432\",
+            \"database.user\": \"admin\",
+            \"database.password\": \"password\",
+            \"database.dbname\": \"orders_db\",
+            \"database.server.name\": \"postgres\",
+            \"table.include.list\": \"public.orders\",
+            \"plugin.name\": \"pgoutput\",
+            \"topic.prefix\": \"postgres\"
+          }
+        }'
+      "
+    restart: "no"
+
+networks:
+  data-pipeline:
+    driver: bridge
+
+volumes:
+  postgres_data:
