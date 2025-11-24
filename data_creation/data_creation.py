@@ -10,14 +10,14 @@ faker = Faker()
 
 
 class Customer:
-    def __init__(self):
+    def __init__(self, name, address):
         self.id = uuid.uuid4()
         self.created_time = datetime.now()
-        self.full_name = faker.name()
+        self.full_name = name
         self.salulation = self.get_salutation()
         self.first_name = self.get_first_name()
         self.last_name = self.get_last_name()
-        self.full_address = faker.address().replace("\n", " ")
+        self.full_address = address
         self.street_number = self.get_address_number()
         self.street_name = self.get_street_name()
         self.city = self.get_city()
@@ -89,4 +89,4 @@ class Orders:
 
 if __name__ == "__main__":
     for i in range(100000):
-        print(Customer().__dict__)
+        print(Customer(faker.name(), faker.address().replace("\n", " ")).__dict__)
