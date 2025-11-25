@@ -5,6 +5,7 @@ from datetime import datetime
 import psycopg2
 from faker import Faker
 import uuid
+import random
 
 faker = Faker()
 
@@ -83,10 +84,35 @@ class Orders:
         self.created_at = datetime.now()
         self.id = uuid.uuid4()
         self.customer_id = customer.id
-        self.order_products = None
-        self.order_quantity = None
+        self.order_products = self.get_product_orders()
+        self.order_quantity = self.get_order_quantity()
+
+    def get_product_orders(self) -> dict:
+        prod_dict = {}
+        prods = random.randint(1, 5)
+        while prods != 0:
+            num = random.randint(1, 10)
+            if num in (1, 2):
+                prod_dict["Mason Margiela Tabi Boots"] = 1500.00
+            if num in (3, 4):
+                prod_dict["Our Legacy Brick Grande"] = 1300.00
+            if num in (5, 6):
+                prod_dict["Margerat Howell Check Shirt"] = 430.00
+            if num in (7, 8):
+                prod_dict["mfpen Service Trouser"] = 549.00
+            if num in (9, 10):
+                prod_dict["Studio Nicholson Lay Boxy Fit T-Shirt"] = 190.00
+            prods -= 1
+        return prod_dict
+
+    def get_order_quantity(self) -> dict:
+        order_pty_dict = {}
+        for key, _ in self.order_products.items():
+            order_pty_dict[key] = random.randint(1, 6)
+        return order_pty_dict
 
 
 if __name__ == "__main__":
-    for i in range(100000):
-        print(Customer(faker.name(), faker.address().replace("\n", " ")).__dict__)
+    cusrtomer = Customer(faker.name(), faker.address().replace("\n", " "))
+    order = Orders(cusrtomer)
+    print(order.__dict__)
