@@ -1,0 +1,91 @@
+package main
+
+import (
+	"database/sql"
+	"log"
+
+	_ "github.com/lib/pq"
+)
+
+func main() {
+	dsn := "postgres://admin:admin@localhost:5332/postgres?sslmode=disable"
+	db, err := sql.Open("postgres", dsn)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := db.Ping(); err != nil {
+		log.Fatal(`ping failed`, err)
+	}
+
+	defer db.Close()
+
+	datadatabase_migration_scripts := []string{
+		`CREATE SCHEMA IF NOT EXISTS STAGING;`,
+		`CREATE SCHEMA IF NOT EXISTS FACT;`,
+		`CREATE TABLE IF NOT EXISTS STAGING.ORDERS (
+			ID VARCHAR PRIMARY KEY,
+			CREATED_DATE VARCHAR,
+			CUSTOMER_ID VARCHAR,
+			ORDER_PRODUCTS VARCHAR,
+			ORDER_QUANTITY VARCHAR
+		);`,
+		`CREATE TABLE IF NOT EXISTS FACT.ORDERS (
+			ID VARCHAR PRIMARY KEY,
+			CREATED_DATE TIMESTAMP,
+			CUSTOMER_ID VARCHAR,
+			FULL_ADDRESS VARCHAR,
+			STREET_NUMBER VARCHAR,
+			STREET_NAME VARCHAR,
+			CITY VARCHAR,
+			POSTCODE VARCHAR,
+			STATE VARCHAR,
+			COST FLOAT
+		);`,
+		`CREATE TABLE IF NOT EXISTS FACT.ORDER_LINE (
+			ID VARCHAR,
+			CREATED_DATE TIMESTAMP,
+			CUSTOMER_ID VARCHAR,
+			PRODUCT VARCHAR,
+			QUANTITY INT,
+			VALUE FLOAT,
+			CONSTRAINT product_pk PRIMARY KEY (ID, PRODUCT)
+		)`,
+		`CREATE TABLE IF NOT EXISTS STAGING.CUSTOMER (
+			ID VARCHAR PRIMARY KEY,
+			CREATED_TIME VARCHAR,
+			FULL_NAME VARCHAR,
+			SALUTATOIN VARCHAR,
+			FIRST_NAME VARCHAR,
+			LAST_NAME VARCHAR,
+			FULL_ADDRESS VARCHAR,
+			STREET_NUMBER VARCHAR,
+			STREET_NAME VARCHAR,
+			CITY VARCHAR,
+			POSTCODE VARCHAR,
+			STATE VARCHAR
+
+		);`,
+		`CREATE TABLE IF NOT EXISTS FACT.CUSTOMER (
+			ID VARCHAR PRIMARY KEY,
+			CREATED_TIME TIMESTAMP,
+			FULL_NAME VARCHAR,
+			SALUTATOIN VARCHAR,
+			FIRST_NAME VARCHAR,
+			LAST_NAME VARCHAR,
+			FULL_ADDRESS VARCHAR,
+			STREET_NUMBER INT,
+			STREET_NAME VARCHAR,
+			CITY VARCHAR,
+			POSTCODE VARCHAR,
+			STATE VARCHAR
+		);`,
+	}
+	for _, q := range datadatabase_migration_scripts {
+		_, err = db.Exec(q)
+		if err != nil {
+			log.Fatal("sql error:", err)
+		}
+
+	}
+}

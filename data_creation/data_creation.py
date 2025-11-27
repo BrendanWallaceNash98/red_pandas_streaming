@@ -1,24 +1,22 @@
-import os
-import time
 import random
 from datetime import datetime
-import psycopg2
 from faker import Faker
 import uuid
-import random
+import json
+
 
 faker = Faker()
 
 
 class Customer:
     def __init__(self, name, address):
-        self.id = uuid.uuid4()
-        self.created_time = datetime.now()
-        self.full_name = name
+        self.id = str(uuid.uuid4())
+        self.created_time = str(datetime.now())
+        self.full_name = str(name)
         self.salulation = self.get_salutation()
         self.first_name = self.get_first_name()
         self.last_name = self.get_last_name()
-        self.full_address = address
+        self.full_address = str(address)
         self.street_number = self.get_address_number()
         self.street_name = self.get_street_name()
         self.city = self.get_city()
@@ -81,8 +79,8 @@ class Customer:
 
 class Orders:
     def __init__(self, customer: Customer):
-        self.created_at = datetime.now()
-        self.id = uuid.uuid4()
+        self.created_at = str(datetime.now())
+        self.id = str(uuid.uuid4())
         self.customer_id = customer.id
         self.order_products = self.get_product_orders()
         self.order_quantity = self.get_order_quantity()
@@ -112,7 +110,26 @@ class Orders:
         return order_pty_dict
 
 
+def dict_to_json_file(dt: dict, name: str):
+    time_stamp_tag = int(datetime.now().timestamp() * 100000)
+    with open(f"data/{name}_{time_stamp_tag}.json", "w") as f:
+        json.dump(dt, f)
+
+
 if __name__ == "__main__":
-    cusrtomer = Customer(faker.name(), faker.address().replace("\n", " "))
-    order = Orders(cusrtomer)
-    print(order.__dict__)
+    customers = [
+        Customer(faker.name(), faker.address().replace("\n", " ")) for c in range(50)
+    ]
+    for _ in range(100000):
+        rn = random.randint(1, 10)
+        if rn <= 5:
+            customer = Customer(faker.name(), faker.address().replace("\n", " "))
+            customers.append(customer)
+            if rn < 3:
+                order = Orders(customer)
+                dict_to_json_file(order.__dict__, "order")
+            dict_to_json_file(customer.__dict__, "customer")
+        else:
+            customer = random.choice(customers)
+            order = Orders(customer)
+            dict_to_json_file(order.__dict__, "order")
