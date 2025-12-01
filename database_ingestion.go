@@ -1,11 +1,15 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
 	"path/filepath"
 	"time"
 )
 
-var customer struct {
+type Customer struct {
 	Id           string    `json:"id"`
 	CreatedTime  time.Time `json:"created_time"`
 	FullName     string    `json:"full_name"`
@@ -20,7 +24,7 @@ var customer struct {
 	State        string    `json:"state"`
 }
 
-var order struct {
+type order struct {
 	Id            string    `json:"id"`
 	CreatedTime   time.Time `json:"created_time"`
 	CustomerId    string    `json:"customer_id"`
@@ -31,10 +35,27 @@ var order struct {
 func get_file_names(file_pattern string) []string {
 	files, err := filepath.Glob(file_pattern)
 	if err != nil {
-		log.fatal("error finding files with pattern %s \n %v", file_pattern, err)
+		log.Fatal("error finding files with pattern %s \n %v", file_pattern, err)
 	}
 	return files
 }
 
 func main() {
+	dir := `data_creation/data/`
+	file_type := `customer*.json`
+	pattern := dir + file_type
+	filepath.Join(dir, pattern)
+	files := get_file_names(pattern)
+	for _, file_path := range files {
+		jsonData, err := os.ReadFile(file_path)
+		if err != nil {
+			fmt.Errorf("error reading the file: %v", err)
+		}
+		var cstmr Customer
+		err = json.Unmarshal(jsonData, &cstmr)
+		if err != nil {
+			fmt.Errorf("error marshhalling the data: %v", err)
+		}
+		fmt.Println(cstmr)
+	}
 }

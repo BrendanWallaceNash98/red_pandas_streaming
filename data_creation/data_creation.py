@@ -111,8 +111,8 @@ class Orders:
 
 
 def dict_to_json_file(dt: dict, name: str):
-    time_stamp_tag = int(datetime.now().timestamp() * 100000)
-    with open(f"data/{name}_{time_stamp_tag}.json", "w") as f:
+    id = uuid.uuid4()
+    with open(f"data/{name}_{id}.json", "w") as f:
         json.dump(dt, f)
 
 
@@ -120,7 +120,7 @@ if __name__ == "__main__":
     customers = [
         Customer(faker.name(), faker.address().replace("\n", " ")) for c in range(50)
     ]
-    for _ in range(100000):
+    for _ in range(10):
         rn = random.randint(1, 10)
         if rn <= 5:
             customer = Customer(faker.name(), faker.address().replace("\n", " "))
