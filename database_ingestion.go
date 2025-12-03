@@ -69,37 +69,40 @@ func createFileChannel(filePath string) chan string {
 
 func parseDataFromFiles[T Order | OrderRaw | Customer](fileChan chan string, dataChan chan T) chan error {
 	errChan := make(chan error, 100)
-	for fileName := range fileChan {
-		jsonData, err := os.ReadFile(fileName)
-		if err != nil {
-			errChan <- err
-		}
-
-		var genType T
-		getTypePtr := any(&genType)
-		// Allocate the correct target based on T
-		switch v := getTypePtr.(type) {
-		case *Order:
-			var marshalData OrderRaw
-			err = json.Unmarshal(jsonData, &marshalData)
+	go func(fileChan chan string, dataChan chan T, errChan chan error) {
+		for fileName := range fileChan {
+			jsonData, err := os.ReadFile(fileName)
 			if err != nil {
 				errChan <- err
+				continue
 			}
-			*v = marshalData.ParseOrder()
 
-		case *Customer:
-			var marshalData Customer
-			err = json.Unmarshal(jsonData, &marshalData)
-			if err != nil {
-				errChan <- err
+			var genType T
+			getTypePtr := any(&genType)
+			// Allocate the correct target based on T
+			switch v := getTypePtr.(type) {
+			case *Order:
+				var marshalData OrderRaw
+				err = json.Unmarshal(jsonData, &marshalData)
+				if err != nil {
+					errChan <- err
+				}
+				*v = marshalData.ParseOrder()
+
+			case *Customer:
+				var marshalData Customer
+				err = json.Unmarshal(jsonData, &marshalData)
+				if err != nil {
+					errChan <- err
+				}
+				*v = marshalData
+			default:
+				errChan <- fmt.Errorf("unsupported type")
 			}
-			*v = marshalData
-		default:
-			errChan <- fmt.Errorf("unsupported type")
+
+			dataChan <- genType
 		}
-
-		dataChan <- genType
-	}
+	}(fileChan, dataChan, errChan)
 
 	return errChan
 }
