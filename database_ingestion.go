@@ -1,11 +1,16 @@
 package main
 
 import (
+	"context"
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 	"path/filepath"
+	"sync"
+
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 type Customer struct {
@@ -67,7 +72,7 @@ func createFileChannel(filePath string) chan string {
 	return fileCh
 }
 
-func parseDataFromFiles[T Order | OrderRaw | Customer](fileChan chan string, dataChan chan T) chan error {
+func parseDataFromFiles[T Order | Customer](fileChan chan string, dataChan chan T) chan error {
 	errChan := make(chan error, 100)
 	go func(fileChan chan string, dataChan chan T, errChan chan error) {
 		for fileName := range fileChan {
@@ -104,6 +109,79 @@ func parseDataFromFiles[T Order | OrderRaw | Customer](fileChan chan string, dat
 		}
 	}(fileChan, dataChan, errChan)
 
+	return errChan
+}
+
+func databaseConn() (*sql.DB, error) {
+	db, err := sql.Open("pgx", os.Getenv("DATABASE_URL"))
+	if err != nil {
+		return nil, err
+	}
+
+	if err := db.PingContext(context.Background()); err != nil {
+		return nil, err
+	}
+
+	return db, err
+}
+
+type sqlParams interface {
+	sqlValues() []interface{}
+}
+
+func (cstmr Customer) sqlValues() []interface{} {
+	return []interface{}{
+		cstmr.Id,
+		cstmr.CreatedTime,
+		cstmr.FullName,
+		cstmr.Salulation,
+		cstmr.FirstName,
+		cstmr.LastName,
+		cstmr.FullAddress,
+		cstmr.StreetNumber,
+		cstmr.StreetName,
+		cstmr.City,
+		cstmr.Postcode,
+		cstmr.State,
+	}
+}
+
+func (ordr Order) sqlValues() []interface{} {
+	return []interface{}{
+		ordr.Id,
+		ordr.CreatedTime,
+		ordr.CustomerId,
+		ordr.OrderProducts,
+		ordr.OrderQuantity,
+	}
+}
+
+func insertData[T sqlParams](db *sql.DB, queryTemp string, data T) error {
+	_, err := db.Exec(queryTemp, data.sqlValues()...)
+	return err
+}
+
+func processInserts[T sqlParams](queryTemp string, db *sql.DB, dataChan chan T) chan error {
+	errChan := make(chan error, 1000)
+	defer close(errChan)
+	workers := 4
+	wg := new(sync.WaitGroup)
+	for range workers {
+		wg.Add(1)
+		go func(db *sql.DB, queryTemp string, dataChan chan T) {
+			for data := range dataChan {
+				err := insertData(db, queryTemp, data)
+				if err != nil {
+					errChan <- err
+				}
+			}
+		}(db, queryTemp, dataChan)
+
+		go func(wg *sync.WaitGroup, errChan chan error) {
+			wg.Wait()
+			close(errChan)
+		}(wg, errChan)
+	}
 	return errChan
 }
 
