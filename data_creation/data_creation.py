@@ -120,7 +120,7 @@ if __name__ == "__main__":
     customers = [
         Customer(faker.name(), faker.address().replace("\n", " ")) for c in range(50)
     ]
-    for _ in range(10):
+    for _ in range(1_000_000):
         rn = random.randint(1, 10)
         if rn <= 5:
             customer = Customer(faker.name(), faker.address().replace("\n", " "))
