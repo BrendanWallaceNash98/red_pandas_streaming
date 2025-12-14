@@ -29,6 +29,7 @@ type Customer struct {
 	State        string `json:"state"`
 }
 
+// need to fix the struct to pick up products
 type OrderRaw struct {
 	Id               string          `json:"id"`
 	CreatedTime      string          `json:"created_at"`
@@ -66,7 +67,6 @@ func getFileNames(filePattern string) []string {
 func createFileChannel(filePattern string) chan string {
 	fileCh := make(chan string, 10000)
 	go func(filerPattern string, fileChan chan string) {
-		defer close(fileChan)
 		for _, file := range getFileNames(filePattern) {
 			fileCh <- file
 		}
@@ -203,7 +203,6 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 	var file_wg sync.WaitGroup
-
 	fmt.Println("starting process")
 
 	file_wg.Add(1)
@@ -211,7 +210,11 @@ func main() {
 		defer file_wg.Done()
 
 		fileChan := createFileChannel(fp)
+		defer close(fileChan)
+
 		dataChan := make(chan Order, 1000)
+		defer close(dataChan)
+
 		fmt.Println("starting file parse")
 		fileParseErrChan := parseDataFromFiles(fileChan, dataChan)
 		fmt.Println("creating database connection")
@@ -247,27 +250,4 @@ func main() {
 	}(`data_creation/data/order*.json`)
 
 	file_wg.Wait()
-
-	/*
-
-		file_type := `order*.json`
-		pattern := dir + file_type
-		filepath.Join(dir, pattern)
-		files := getFileNames(pattern)
-		for _, file_path := range files {
-			jsonData, err := os.ReadFile(file_path)
-			if err != nil {
-				fmt.Printf("error reading the file: %v", err)
-				continue
-			}
-			var json_order OrderRaw
-			err = json.Unmarshal(jsonData, &json_order)
-			if err != nil {
-				fmt.Printf("error marshhalling the data: %v", err)
-				continue
-			}
-			clean_order := json_order.ParseOrder()
-			fmt.Println(clean_order)
-		}
-	*/
 }
