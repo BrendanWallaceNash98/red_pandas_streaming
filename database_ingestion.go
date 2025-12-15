@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
@@ -83,7 +84,11 @@ func parseDataFromFiles[T Order | Customer](fileChan <-chan string, dataChan cha
 				errChan <- err
 				continue
 			}
-
+			err = moveFile(fileName)
+			if err != nil {
+				errChan <- err
+				continue
+			}
 			var genType T
 			getTypePtr := any(&genType)
 			// Allocate the correct target based on T
@@ -112,6 +117,30 @@ func parseDataFromFiles[T Order | Customer](fileChan <-chan string, dataChan cha
 	}(fileChan, dataChan, errChan)
 
 	return errChan
+}
+
+func createProcessFolders() error {
+	baseDir := `data_creation/data/processed/`
+	err := os.MkdirAll(baseDir, os.ModePerm)
+	if err != nil {
+		return err
+	}
+	err = os.MkdirAll(baseDir+`orders/`, os.ModePerm)
+	if err != nil {
+		return err
+	}
+	err = os.MkdirAll(baseDir+`customers/`, os.ModePerm)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func moveFile(fileName string) error {
+	baseDir := `data_creation/data/processed/`
+	fileParts := strings.Split(fileName, "_")
+	err := os.Rename(fileName, baseDir+fileParts[0]+`\`)
+	return err
 }
 
 func databaseConn() (*sql.DB, error) {
@@ -198,7 +227,11 @@ func processInserts[T sqlParams](db *sql.DB, queryTemp string, dataChan chan T) 
 func main() {
 	// dir := `data_creation/data/`
 	// file_types := []string{`order*.json`, `customer*.json`}
-	err := godotenv.Load() // loads .env from current working directory
+	err := createProcessFolders()
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = godotenv.Load() // loads .env from current working directory
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -248,6 +281,50 @@ func main() {
 
 		errWg.Wait()
 	}(`data_creation/data/order*.json`)
+
+	file_wg.Add(1)
+	go func(fp string) {
+		defer file_wg.Done()
+
+		fileChan := createFileChannel(fp)
+		defer close(fileChan)
+
+		dataChan := make(chan Customer, 1000)
+		defer close(dataChan)
+
+		fmt.Println("starting file parse")
+		fileParseErrChan := parseDataFromFiles(fileChan, dataChan)
+		fmt.Println("creating database connection")
+		dbConn, err := databaseConn()
+		if err != nil {
+			log.Fatal(`failed to connect to database`)
+		}
+		fmt.Println("processing insers")
+		insertQuery := `INSERT INTO staging.orders (id, created_date, customer_id, order_products, order_quantity) VALUES ($1, $2, $3, $4, $5);`
+		dbInsertErrChan := processInserts(dbConn, insertQuery, dataChan)
+
+		fmt.Println("moving on to errChans")
+		var errWg sync.WaitGroup
+		errWg.Add(1)
+		go func(errChan <-chan error, wg *sync.WaitGroup) {
+			defer errWg.Done()
+			defer close(fileParseErrChan)
+			for i := range errChan {
+				log.Fatal(i)
+			}
+		}(fileParseErrChan, &errWg)
+
+		errWg.Add(1)
+		go func(errChan <-chan error, wg *sync.WaitGroup) {
+			defer errWg.Done()
+			defer close(dbInsertErrChan)
+			for i := range errChan {
+				log.Fatal(i)
+			}
+		}(dbInsertErrChan, &errWg)
+
+		errWg.Wait()
+	}(`data_creation/data/customer*.json`)
 
 	file_wg.Wait()
 }
