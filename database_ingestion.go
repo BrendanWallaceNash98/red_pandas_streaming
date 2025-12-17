@@ -202,6 +202,7 @@ func insertData[T sqlParams](db *sql.DB, queryTemp string, data T) error {
 
 func processInserts[T sqlParams](db *sql.DB, queryTemp string, dataChan chan T) chan error {
 	errChan := make(chan error, 1000)
+	defer close(errChan)
 	workers := 4
 	wg := new(sync.WaitGroup)
 	wg.Add(workers)
