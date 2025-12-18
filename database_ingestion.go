@@ -23,7 +23,7 @@ type Customer struct {
 	FirstName    string `json:"first_name"`
 	LastName     string `json:"last_name"`
 	FullAddress  string `json:"full_address"`
-	StreetNumber int    `json:"street_number"`
+	StreetNumber int64  `json:"street_number"`
 	StreetName   string `json:"street_name"`
 	City         string `json:"city"`
 	Postcode     string `json:"postcode"`
@@ -68,6 +68,7 @@ func getFileNames(filePattern string) []string {
 func createFileChannel(filePattern string) chan string {
 	fileCh := make(chan string, 10000)
 	go func(filerPattern string, fileChan chan string) {
+		defer close(fileCh)
 		for _, file := range getFileNames(filePattern) {
 			fileCh <- file
 		}
@@ -78,6 +79,7 @@ func createFileChannel(filePattern string) chan string {
 func parseDataFromFiles[T Order | Customer](fileChan <-chan string, dataChan chan<- T) chan error {
 	errChan := make(chan error, 100)
 	go func(fileChan <-chan string, dataChan chan<- T, errChan chan error) {
+		defer close(errChan)
 		for fileName := range fileChan {
 			jsonData, err := os.ReadFile(fileName)
 			if err != nil {
@@ -147,6 +149,8 @@ func databaseConn() (*sql.DB, error) {
 	databaseUrl := os.Getenv("DATABASE_URL")
 	fmt.Printf("database url is : %v", databaseUrl)
 	db, err := sql.Open("pgx", databaseUrl)
+	db.SetMaxOpenConns(8)
+	db.SetMaxIdleConns(8)
 	if err != nil {
 		return nil, err
 	}
@@ -190,24 +194,19 @@ func (ordr Order) sqlValues() []interface{} {
 }
 
 func insertData[T sqlParams](db *sql.DB, queryTemp string, data T) error {
-	result, err := db.Exec(queryTemp, data.sqlValues()...)
-	fmt.Printf("sql result is : n/ %v", result)
-	if err != nil {
-		log.Printf("sql error: %v", err)
-	} else {
-		log.Printf("succes???: %v", result)
-	}
+	_, err := db.Exec(queryTemp, data.sqlValues()...)
 	return err
 }
 
 func processInserts[T sqlParams](db *sql.DB, queryTemp string, dataChan chan T) chan error {
 	errChan := make(chan error, 1000)
-	defer close(errChan)
-	workers := 4
+	workers := 8
 	wg := new(sync.WaitGroup)
 	wg.Add(workers)
 	for i := 0; i < workers; i++ {
 		go func(db *sql.DB, queryTemp string, dataChan chan T) {
+			defer close(dataChan)
+			defer close(errChan)
 			defer wg.Done()
 			for data := range dataChan {
 				err := insertData(db, queryTemp, data)
@@ -244,17 +243,14 @@ func main() {
 		defer file_wg.Done()
 
 		fileChan := createFileChannel(fp)
-		defer close(fileChan)
 
 		dataChan := make(chan Order, 1000)
-		defer close(dataChan)
-
 		fmt.Println("starting file parse")
 		fileParseErrChan := parseDataFromFiles(fileChan, dataChan)
 		fmt.Println("creating database connection")
 		dbConn, err := databaseConn()
 		if err != nil {
-			log.Fatal(`failed to connect to database`)
+			log.Println(`failed to connect to database`)
 		}
 		fmt.Println("processing insers")
 		insertQuery := `INSERT INTO staging.orders (id, created_date, customer_id, order_products, order_quantity) VALUES ($1, $2, $3, $4, $5);`
@@ -265,7 +261,6 @@ func main() {
 		errWg.Add(1)
 		go func(errChan <-chan error, wg *sync.WaitGroup) {
 			defer errWg.Done()
-			defer close(fileParseErrChan)
 			for i := range errChan {
 				log.Fatal(i)
 			}
@@ -274,7 +269,6 @@ func main() {
 		errWg.Add(1)
 		go func(errChan <-chan error, wg *sync.WaitGroup) {
 			defer errWg.Done()
-			defer close(dbInsertErrChan)
 			for i := range errChan {
 				log.Fatal(i)
 			}
@@ -288,20 +282,21 @@ func main() {
 		defer file_wg.Done()
 
 		fileChan := createFileChannel(fp)
-		defer close(fileChan)
 
 		dataChan := make(chan Customer, 1000)
-		defer close(dataChan)
 
 		fmt.Println("starting file parse")
 		fileParseErrChan := parseDataFromFiles(fileChan, dataChan)
 		fmt.Println("creating database connection")
 		dbConn, err := databaseConn()
 		if err != nil {
-			log.Fatal(`failed to connect to database`)
+			log.Println(`failed to connect to database`)
 		}
 		fmt.Println("processing insers")
-		insertQuery := `INSERT INTO staging.orders (id, created_date, customer_id, order_products, order_quantity) VALUES ($1, $2, $3, $4, $5);`
+		insertQuery := `INSERT INTO staging.customer 
+			(Id, Created_Time, Full_Name, Salulation, First_Name, Last_Name, Full_Address, Street_Number, street_name, City, Postcode, State) 
+			VALUES 
+			($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);`
 		dbInsertErrChan := processInserts(dbConn, insertQuery, dataChan)
 
 		fmt.Println("moving on to errChans")
@@ -309,7 +304,6 @@ func main() {
 		errWg.Add(1)
 		go func(errChan <-chan error, wg *sync.WaitGroup) {
 			defer errWg.Done()
-			defer close(fileParseErrChan)
 			for i := range errChan {
 				log.Fatal(i)
 			}
@@ -318,7 +312,6 @@ func main() {
 		errWg.Add(1)
 		go func(errChan <-chan error, wg *sync.WaitGroup) {
 			defer errWg.Done()
-			defer close(dbInsertErrChan)
 			for i := range errChan {
 				log.Fatal(i)
 			}
