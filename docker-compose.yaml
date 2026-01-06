@@ -6,9 +6,9 @@ services:
     image: postgres:15-alpine
     container_name: postgres
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: eccom_db
+      postgres_user: admin
+      postgres_password: admin
+      postgres_db: eccom_db
     ports:
       - "5432:5432"
     volumes:
@@ -16,7 +16,7 @@ services:
     networks:
       - data-pipeline
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin"]
+      test: ["cmd-shell", "pg_isready -u admin"]
       interval: 10s
       timeout: 5s
       retries: 5
