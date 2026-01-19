@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # PostgreSQL Database
@@ -6,17 +6,21 @@ services:
     image: postgres:15-alpine
     container_name: postgres
     environment:
-      postgres_user: admin
-      postgres_password: admin
-      postgres_db: eccom_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: eccom_db
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - data-pipeline
+    command:
+      - "postgres"
+      - "-c"
+      - "wal_level=logical"
     healthcheck:
-      test: ["cmd-shell", "pg_isready -u admin"]
+      test: ["CMD-SHELL", "pg_isready -U admin"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -28,8 +32,8 @@ services:
       dockerfile: Dockerfile
     container_name: order-generator
     environment:
-      DATABASE_URL: postgresql://admin:password@postgres:5432/orders_db
-      GENERATE_INTERVAL: 5  # seconds between order batches
+      DATABASE_URL: postgresql://admin:admin@postgres:5432/eccom_db
+      GENERATE_INTERVAL: 5
     depends_on:
       postgres:
         condition: service_healthy
@@ -47,7 +51,7 @@ services:
     container_name: dbt
     environment:
       DBT_PROFILES_DIR: /root/.dbt
-      DATABASE_URL: postgresql://admin:password@postgres:5432/orders_db
+      DATABASE_URL: postgresql://admin:admin@postgres:5432/eccom_db
     depends_on:
       postgres:
         condition: service_healthy
@@ -89,14 +93,15 @@ services:
       - --mode dev-container
       - --default-log-level=info
     ports:
-      - "18081:18081"  # Schema Registry
-      - "18082:18082"  # HTTP Proxy
-      - "19092:19092"  # Kafka API
-      - "9644:9644"    # Admin API
+      - "18081:18081"
+      - "18082:18082"
+      - "19092:19092"
+      - "9644:9644"
     networks:
       - data-pipeline
     healthcheck:
-      test: ["CMD-SHELL", "rpk cluster health | grep -E 'Healthy:.+true' || exit 1"]
+      test:
+        ["CMD-SHELL", "rpk cluster health | grep -E 'Healthy:.+true' || exit 1"]
       interval: 15s
       timeout: 3s
       retries: 5
@@ -212,8 +217,8 @@ services:
             \"database.hostname\": \"postgres\",
             \"database.port\": \"5432\",
             \"database.user\": \"admin\",
-            \"database.password\": \"password\",
-            \"database.dbname\": \"orders_db\",
+            \"database.password\": \"admin\",
+            \"database.dbname\": \"eccom_db\",
             \"database.server.name\": \"postgres\",
             \"table.include.list\": \"public.orders\",
             \"plugin.name\": \"pgoutput\",
