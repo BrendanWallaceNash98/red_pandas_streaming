@@ -1,0 +1,30 @@
+[0m22:23:19.961321 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1053bfc80>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x106cd2120>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x106cd20f0>]}
+
+
+============================== 22:23:19.964843 | a76da804-6ac3-4566-87cb-2da7c7a23539 ==============================
+[0m22:23:19.964843 [info ] [MainThread]: Running with dbt=1.11.2
+[0m22:23:19.965185 [debug] [MainThread]: running dbt with arguments {'warn_error': 'None', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'partial_parse': 'True', 'invocation_command': 'dbt init', 'log_path': 'logs', 'quiet': 'False', 'fail_fast': 'False', 'send_anonymous_usage_stats': 'True', 'no_print': 'None', 'profiles_dir': '/Users/brendanwallace-nash/.dbt', 'empty': 'None', 'introspect': 'True', 'log_cache_events': 'False', 'use_colors': 'True', 'cache_selected_only': 'False', 'printer_width': '80', 'indirect_selection': 'eager', 'debug': 'False', 'log_format': 'default', 'write_json': 'True', 'target_path': 'None', 'version_check': 'True', 'use_experimental_parser': 'False'}
+[0m22:23:29.929291 [debug] [MainThread]: Starter project path: /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/dbt/include/starter_project
+[0m22:23:29.938814 [info ] [MainThread]: 
+Your new dbt project "red_pandas_project" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m22:23:29.939334 [info ] [MainThread]: Setting up your profile.
+[0m22:27:20.803195 [info ] [MainThread]: Profile red_pandas_project written to /Users/brendanwallace-nash/.dbt/profiles.yml using target's profile_template.yml and your supplied values. Run 'dbt debug' to validate the connection.
+[0m22:27:20.839667 [debug] [MainThread]: Resource report: {"command_name": "init", "command_success": true, "command_wall_clock_time": 240.91487, "process_in_blocks": "0", "process_kernel_time": 0.201391, "process_mem_max_rss": "111542272", "process_out_blocks": "0", "process_user_time": 0.783684}
+[0m22:27:20.840682 [debug] [MainThread]: Command `dbt init` succeeded at 22:27:20.840519 after 240.92 seconds
+[0m22:27:20.841283 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107983fb0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1079bdf10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1053bfc80>]}
+[0m22:27:20.841664 [debug] [MainThread]: Flushing usage events
+[0m22:27:22.213724 [debug] [MainThread]: An error was encountered while trying to flush usage events
