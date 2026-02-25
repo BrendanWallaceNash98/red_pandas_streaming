@@ -1,0 +1,160 @@
+version: 2
+
+sources:
+  - name: staging
+    description: Raw data loaded by Go service from JSON files
+    database: postgres  # Update with your database name
+    schema: staging
+    tables:
+      - name: customer
+        description: Customer information from source system
+        columns:
+          - name: id
+            description: Unique customer identifier
+            tests:
+              - unique
+              - not_null
+          
+          - name: created_time
+            description: Timestamp when customer was created
+          
+          - name: full_name
+            description: Customer's complete name
+          
+          - name: salulation
+            description: Customer salutation (Mr., Mrs., Ms., etc.)
+            meta:
+              note: "Typo in source - should be 'salutation'"
+          
+          - name: first_name
+            description: Customer's first name
+          
+          - name: last_name
+            description: Customer's last name
+          
+          - name: full_address
+            description: Complete address as a single string
+          
+          - name: street_number
+            description: Street number portion of address
+          
+          - name: street_name
+            description: Street name portion of address
+          
+          - name: city
+            description: City name
+          
+          - name: postcode
+            description: Postal code
+          
+          - name: state
+            description: State code (should be 2 characters)
+            tests:
+              - accepted_values:
+                  values: ['NSW', 'VIC', 'QLD', 'SA', 'WA', 'TAS', 'NT', 'ACT']
+                  quote: true
+                  severity: warn
+      
+      - name: orders
+        description: Order transactions from source system
+        columns:
+          - name: id
+            description: Unique order identifier
+            tests:
+              - unique
+              - not_null
+          
+          - name: created_date
+            description: Date when order was created
+          
+          - name: customer_id
+            description: Foreign key to customer table
+            tests:
+              - not_null
+              - relationships:
+                  to: source('staging', 'customer')
+                  field: id
+          
+          - name: order_products
+            description: Products in the order (may be JSON or delimited string)
+            meta:
+              note: "Data type unclear - may need parsing in staging model"
+          
+          - name: order_quantity
+            description: Quantity of items in order
+            meta:
+              note: "Stored as varchar - should be cast to numeric in staging model"
+
+models:
+  - name: stg_customer
+    description: Cleaned and typed customer data
+    columns:
+      - name: customer_id
+        description: Unique customer identifier
+        tests:
+          - unique
+          - not_null
+      
+      - name: created_at
+        description: Timestamp when customer was created (parsed from varchar)
+      
+      - name: full_name
+        description: Customer's complete name
+      
+      - name: salutation
+        description: Customer salutation (corrected spelling)
+      
+      - name: first_name
+        description: Customer's first name
+      
+      - name: last_name
+        description: Customer's last name
+      
+      - name: street_number
+        description: Street number
+      
+      - name: street_name
+        description: Street name
+      
+      - name: city
+        description: City name
+      
+      - name: postcode
+        description: Postal code
+      
+      - name: state
+        description: State code (validated and uppercase)
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['NSW', 'VIC', 'QLD', 'SA', 'WA', 'TAS', 'NT', 'ACT']
+  
+  - name: stg_orders
+    description: Cleaned and typed order data
+    columns:
+      - name: order_id
+        description: Unique order identifier
+        tests:
+          - unique
+          - not_null
+      
+      - name: created_at
+        description: Timestamp when order was created (parsed from varchar)
+        tests:
+          - not_null
+      
+      - name: customer_id
+        description: Foreign key to customer
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customer')
+              field: customer_id
+      
+      - name: order_products
+        description: Products in the order (parsed/cleaned)
+      
+      - name: order_quantity
+        description: Quantity of items in order (cast to integer)
+        tests:
+          - not_null
