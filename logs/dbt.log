@@ -1,0 +1,32 @@
+[0m14:32:59.249586 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x103cf03b0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x104c3c830>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x104c3c2f0>]}
+
+
+============================== 14:32:59.253831 | 293acde0-82f2-40e6-a037-f553366eae42 ==============================
+[0m14:32:59.253831 [info ] [MainThread]: Running with dbt=1.11.2
+[0m14:32:59.254259 [debug] [MainThread]: running dbt with arguments {'log_cache_events': 'False', 'partial_parse': 'True', 'no_print': 'None', 'log_path': 'logs', 'introspect': 'True', 'static_parser': 'True', 'fail_fast': 'False', 'empty': 'False', 'use_experimental_parser': 'False', 'debug': 'False', 'profiles_dir': '/Users/brendanwallace-nash/.dbt', 'version_check': 'True', 'invocation_command': 'dbt build', 'target_path': 'None', 'use_colors': 'True', 'log_format': 'default', 'quiet': 'False', 'write_json': 'True', 'indirect_selection': 'eager', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'warn_error': 'None', 'cache_selected_only': 'False', 'send_anonymous_usage_stats': 'True', 'printer_width': '80'}
+[0m14:32:59.254657 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /Users/brendanwallace-nash/Documents/red_pandas_project/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m14:32:59.256398 [debug] [MainThread]: Resource report: {"command_name": "build", "command_success": false, "command_wall_clock_time": 0.056138206, "process_in_blocks": "0", "process_kernel_time": 0.181116, "process_mem_max_rss": "111820800", "process_out_blocks": "0", "process_user_time": 0.937557}
+[0m14:32:59.256741 [debug] [MainThread]: Command `dbt build` failed at 14:32:59.256680 after 0.06 seconds
+[0m14:32:59.256992 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x104c3c530>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x104c3c680>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x104c3dbe0>]}
+[0m14:32:59.257218 [debug] [MainThread]: Flushing usage events
+[0m14:33:01.374998 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m14:38:11.255976 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109c56870>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b433e90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b4642f0>]}
+
+
+============================== 14:38:11.259270 | c4971c5c-35de-4449-9fa2-b990a2e83818 ==============================
+[0m14:38:11.259270 [info ] [MainThread]: Running with dbt=1.11.2
+[0m14:38:11.259700 [debug] [MainThread]: running dbt with arguments {'static_parser': 'True', 'version_check': 'True', 'log_format': 'default', 'profiles_dir': '/Users/brendanwallace-nash/.dbt', 'no_print': 'None', 'fail_fast': 'False', 'target_path': 'None', 'debug': 'False', 'cache_selected_only': 'False', 'send_anonymous_usage_stats': 'True', 'log_path': 'logs', 'indirect_selection': 'eager', 'warn_error': 'None', 'use_experimental_parser': 'False', 'use_colors': 'True', 'printer_width': '80', 'partial_parse': 'True', 'write_json': 'True', 'introspect': 'True', 'invocation_command': 'dbt build', 'quiet': 'False', 'log_cache_events': 'False', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'empty': 'False'}
+[0m14:38:11.260128 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /Users/brendanwallace-nash/Documents/red_pandas_project/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m14:38:11.261911 [debug] [MainThread]: Resource report: {"command_name": "build", "command_success": false, "command_wall_clock_time": 0.052139875, "process_in_blocks": "0", "process_kernel_time": 0.143993, "process_mem_max_rss": "112115712", "process_out_blocks": "0", "process_user_time": 0.922974}
+[0m14:38:11.262263 [debug] [MainThread]: Command `dbt build` failed at 14:38:11.262197 after 0.05 seconds
+[0m14:38:11.262523 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b433d40>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109c56870>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b0c6420>]}
+[0m14:38:11.262753 [debug] [MainThread]: Flushing usage events
+[0m14:38:13.339282 [debug] [MainThread]: An error was encountered while trying to flush usage events
