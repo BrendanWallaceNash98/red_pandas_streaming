@@ -1,30 +1,34 @@
-name: 'red_pandas_dbt'
+name: 'red_pandas_project'
 version: '1.0.0'
-config-version: 2
-
-
 profile: 'red_pandas_project'
 
 model-paths: ["models"]
-analysis-path: ["analyses"]
+analysis-paths: ["analyses"]
 test-paths: ["tests"]
-seed-path: ["seeds"]
-marco-paths: ["marcos"]
-snapshots-path: ["snapshots"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
 
-target-path: "target"
 clean-targets:
-  - "targets"
+  - "target"
   - "dbt_packages"
 
 models:
-  red_pandas_dbt:
+  red_pandas_project:
     staging:
       +materialized: view
-      +schema: view
-    fact:
+      +schema: staging
+      +tags: ['staging']
+    marts:
       +materialized: table
-      +schema: fact
-    dimesnion:
-      +materialized: table
-      +schema: dimension
+      +schema: marts
+      +tags: ['marts']
+      +on_schema_change: sync_all_columns
+    reporting:
+      +materialized: view
+      +schema: reporting
+      +tags: ['reporting']
+
+seeds:
+  red_pandas_project:
+    +schema: raw

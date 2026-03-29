@@ -162,3 +162,195 @@ parsing.
 [0m14:44:33.873528 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107b666f0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107ba6420>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107b71ac0>]}
 [0m14:44:33.873928 [debug] [MainThread]: Flushing usage events
 [0m14:44:36.008141 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m17:29:35.616379 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x106d51a60>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107c2fa10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107c640e0>]}
+
+
+============================== 17:29:37.790005 | 2f5a387c-c871-422b-af0f-fe5c53779779 ==============================
+[0m17:29:37.790005 [info ] [MainThread]: Running with dbt=1.11.2
+[0m17:29:37.792476 [debug] [MainThread]: running dbt with arguments {'log_cache_events': 'False', 'log_path': '/Users/brendanwallace-nash/Documents/red_pandas_project/dbt/dbt/logs', 'partial_parse': 'True', 'warn_error': 'None', 'send_anonymous_usage_stats': 'True', 'log_format': 'default', 'static_parser': 'True', 'write_json': 'True', 'invocation_command': 'dbt seed', 'introspect': 'True', 'target_path': 'None', 'use_colors': 'True', 'cache_selected_only': 'False', 'version_check': 'True', 'empty': 'None', 'indirect_selection': 'eager', 'printer_width': '80', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'no_print': 'None', 'debug': 'False', 'quiet': 'False', 'profiles_dir': '/Users/brendanwallace-nash/.dbt', 'use_experimental_parser': 'False', 'fail_fast': 'False'}
+[0m17:29:37.961029 [error] [MainThread]: Encountered an error:
+Runtime Error
+  at path []: Additional properties are not allowed ('analysis-path', 'marco-paths', 'seed-path', 'snapshots-path' were unexpected)
+
+Error encountered in /Users/brendanwallace-nash/Documents/red_pandas_project/dbt/dbt/dbt_project.yml
+[0m17:29:37.983853 [debug] [MainThread]: Resource report: {"command_name": "seed", "command_success": false, "command_wall_clock_time": 4.1581006, "process_in_blocks": "0", "process_kernel_time": 0.261204, "process_mem_max_rss": "116211712", "process_out_blocks": "0", "process_user_time": 1.029576}
+[0m17:29:37.984349 [debug] [MainThread]: Command `dbt seed` failed at 17:29:37.984269 after 4.16 seconds
+[0m17:29:37.984637 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107891280>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107be85f0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107c154c0>]}
+[0m17:29:37.984923 [debug] [MainThread]: Flushing usage events
+[0m17:29:39.166362 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m17:32:36.765720 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x106ef8110>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x11102f9b0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x11102ffe0>]}
+
+
+============================== 17:32:36.769327 | ac90cb74-6649-42eb-80d3-b7e724dd314c ==============================
+[0m17:32:36.769327 [info ] [MainThread]: Running with dbt=1.11.2
+[0m17:32:36.769782 [debug] [MainThread]: running dbt with arguments {'warn_error': 'None', 'invocation_command': 'dbt seed', 'fail_fast': 'False', 'log_cache_events': 'False', 'no_print': 'None', 'version_check': 'True', 'send_anonymous_usage_stats': 'True', 'write_json': 'True', 'static_parser': 'True', 'quiet': 'False', 'debug': 'False', 'partial_parse': 'True', 'log_path': '/Users/brendanwallace-nash/Documents/red_pandas_project/dbt/dbt/logs', 'printer_width': '80', 'use_colors': 'True', 'target_path': 'None', 'empty': 'None', 'indirect_selection': 'eager', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'log_format': 'default', 'introspect': 'True', 'profiles_dir': '/Users/brendanwallace-nash/.dbt', 'use_experimental_parser': 'False', 'cache_selected_only': 'False'}
+[0m17:32:36.904832 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': 'ac90cb74-6649-42eb-80d3-b7e724dd314c', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1114fdb20>]}
+[0m17:32:36.946212 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'adapter_info', 'label': 'ac90cb74-6649-42eb-80d3-b7e724dd314c', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x106ef8110>]}
+[0m17:32:36.947237 [info ] [MainThread]: Registered adapter: postgres=1.10.0
+[0m17:32:37.058646 [debug] [MainThread]: checksum: 3d40d8bbe1bef07db1c24822f2dbfff8bc07f2a48ed4fe2658a40653aec0b54b, vars: {}, profile: , target: , version: 1.11.2
+[0m17:32:41.331547 [info ] [MainThread]: Unable to do partial parsing because a project config has changed
+[0m17:32:41.332000 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'partial_parser', 'label': 'ac90cb74-6649-42eb-80d3-b7e724dd314c', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x112837890>]}
+[0m17:32:45.985862 [error] [MainThread]: Encountered an error:
+Parsing Error
+  Invalid test config given in models/staging/schema.yml:
+  	test definition dictionary must have exactly one key, got [('accepted_values', {'values': ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY', 'DC']}), ('severity', 'warn')] instead (2 keys)
+  	@: UnparsedModelUpdate(original_file_path='mode...ne)
+[0m17:32:45.988047 [debug] [MainThread]: Resource report: {"command_name": "seed", "command_success": false, "command_wall_clock_time": 9.271617, "process_in_blocks": "0", "process_kernel_time": 0.273408, "process_mem_max_rss": "132169728", "process_out_blocks": "0", "process_user_time": 1.87649}
+[0m17:32:45.991360 [debug] [MainThread]: Command `dbt seed` failed at 17:32:45.991292 after 9.27 seconds
+[0m17:32:45.991652 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x11102f7a0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x112c2b020>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x112c2b620>]}
+[0m17:32:45.991915 [debug] [MainThread]: Flushing usage events
+[0m17:32:47.011659 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m17:34:09.818977 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109205910>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10934ffb0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1086a0b30>]}
+
+
+============================== 17:34:09.822744 | 959bbcd3-84c0-40ce-bfc1-50b6ea400de5 ==============================
+[0m17:34:09.822744 [info ] [MainThread]: Running with dbt=1.11.2
+[0m17:34:09.823201 [debug] [MainThread]: running dbt with arguments {'version_check': 'True', 'no_print': 'None', 'log_path': '/Users/brendanwallace-nash/Documents/red_pandas_project/dbt/dbt/logs', 'profiles_dir': '/Users/brendanwallace-nash/.dbt', 'log_format': 'default', 'fail_fast': 'False', 'warn_error': 'None', 'printer_width': '80', 'cache_selected_only': 'False', 'use_experimental_parser': 'False', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'static_parser': 'True', 'invocation_command': 'dbt seed', 'target_path': 'None', 'introspect': 'True', 'partial_parse': 'True', 'log_cache_events': 'False', 'write_json': 'True', 'use_colors': 'True', 'send_anonymous_usage_stats': 'True', 'debug': 'False', 'empty': 'None', 'indirect_selection': 'eager', 'quiet': 'False'}
+[0m17:34:09.934058 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': '959bbcd3-84c0-40ce-bfc1-50b6ea400de5', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109394ad0>]}
+[0m17:34:09.971716 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'adapter_info', 'label': '959bbcd3-84c0-40ce-bfc1-50b6ea400de5', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1093356d0>]}
+[0m17:34:09.972324 [info ] [MainThread]: Registered adapter: postgres=1.10.0
+[0m17:34:10.044770 [debug] [MainThread]: checksum: 3d40d8bbe1bef07db1c24822f2dbfff8bc07f2a48ed4fe2658a40653aec0b54b, vars: {}, profile: , target: , version: 1.11.2
+[0m17:34:10.107052 [info ] [MainThread]: Unable to do partial parsing because a project config has changed
+[0m17:34:10.107438 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'partial_parser', 'label': '959bbcd3-84c0-40ce-bfc1-50b6ea400de5', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10ab4fef0>]}
+[0m17:34:10.841097 [error] [MainThread]: Encountered an error:
+Parsing Error
+  Invalid test config given in models/staging/schema.yml:
+  	test definition dictionary must have exactly one key, got [('accepted_values', {'values': ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY', 'DC']}), ('severity', 'warn')] instead (2 keys)
+  	@: UnparsedModelUpdate(original_file_path='mode...ne)
+[0m17:34:10.843450 [debug] [MainThread]: Resource report: {"command_name": "seed", "command_success": false, "command_wall_clock_time": 1.0720474, "process_in_blocks": "0", "process_kernel_time": 0.266695, "process_mem_max_rss": "131104768", "process_out_blocks": "0", "process_user_time": 1.874131}
+[0m17:34:10.844035 [debug] [MainThread]: Command `dbt seed` failed at 17:34:10.843955 after 1.07 seconds
+[0m17:34:10.844327 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1091b75f0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1086a1af0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10a536270>]}
+[0m17:34:10.844581 [debug] [MainThread]: Flushing usage events
+[0m17:34:12.001573 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m17:35:42.838833 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1079bbaa0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107285f10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107285f40>]}
+
+
+============================== 17:35:42.843362 | 072d715c-ce4f-42ca-99bd-4dc772ce20a2 ==============================
+[0m17:35:42.843362 [info ] [MainThread]: Running with dbt=1.11.2
+[0m17:35:42.843901 [debug] [MainThread]: running dbt with arguments {'profiles_dir': '/Users/brendanwallace-nash/.dbt', 'debug': 'False', 'no_print': 'None', 'introspect': 'True', 'version_check': 'True', 'static_parser': 'True', 'warn_error': 'None', 'fail_fast': 'False', 'target_path': 'None', 'cache_selected_only': 'False', 'log_cache_events': 'False', 'indirect_selection': 'eager', 'empty': 'None', 'use_experimental_parser': 'False', 'log_path': '/Users/brendanwallace-nash/Documents/red_pandas_project/dbt/dbt/logs', 'use_colors': 'True', 'invocation_command': 'dbt seed', 'quiet': 'False', 'printer_width': '80', 'partial_parse': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'send_anonymous_usage_stats': 'True', 'write_json': 'True', 'log_format': 'default'}
+[0m17:35:42.959536 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': '072d715c-ce4f-42ca-99bd-4dc772ce20a2', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1079e5b20>]}
+[0m17:35:42.997956 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'adapter_info', 'label': '072d715c-ce4f-42ca-99bd-4dc772ce20a2', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1070bfb60>]}
+[0m17:35:42.998644 [info ] [MainThread]: Registered adapter: postgres=1.10.0
+[0m17:35:43.072367 [debug] [MainThread]: checksum: 3d40d8bbe1bef07db1c24822f2dbfff8bc07f2a48ed4fe2658a40653aec0b54b, vars: {}, profile: , target: , version: 1.11.2
+[0m17:35:43.141669 [info ] [MainThread]: Unable to do partial parsing because a project config has changed
+[0m17:35:43.142117 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'partial_parser', 'label': '072d715c-ce4f-42ca-99bd-4dc772ce20a2', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107a1e090>]}
+[0m17:35:43.850493 [warn ] [MainThread]: [[33mWARNING[0m][MissingArgumentsPropertyInGenericTestDeprecation]: Deprecated
+functionality
+Found top-level arguments to test `accepted_values` defined on 'stg_customer' in
+package 'red_pandas_project' (models/staging/schema.yml). Arguments to generic
+tests should be nested under the `arguments` property.
+[0m17:35:43.850940 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'deprecation', 'label': '072d715c-ce4f-42ca-99bd-4dc772ce20a2', 'property_': 'warn', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1083f7c80>]}
+[0m17:35:44.022586 [warn ] [MainThread]: [[33mWARNING[0m]: Configuration paths exist in your dbt_project.yml file which do not apply to any resources.
+There are 2 unused configuration paths:
+- models.red_pandas_project.marts
+- models.red_pandas_project.reporting
+[0m17:35:44.029707 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'load_project', 'label': '072d715c-ce4f-42ca-99bd-4dc772ce20a2', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109db65d0>]}
+[0m17:35:46.561712 [debug] [MainThread]: Wrote artifact WritableManifest to /Users/brendanwallace-nash/Documents/red_pandas_project/dbt/dbt/target/manifest.json
+[0m17:35:48.298421 [debug] [MainThread]: Wrote artifact SemanticManifest to /Users/brendanwallace-nash/Documents/red_pandas_project/dbt/dbt/target/semantic_manifest.json
+[0m17:35:51.993602 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '072d715c-ce4f-42ca-99bd-4dc772ce20a2', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109da4d10>]}
+[0m17:35:51.994461 [info ] [MainThread]: Found 4 models, 1 seed, 17 data tests, 2 sources, 464 macros
+[0m17:35:51.994794 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '072d715c-ce4f-42ca-99bd-4dc772ce20a2', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109e0a540>]}
+[0m17:35:51.997136 [info ] [MainThread]: 
+[0m17:35:51.997516 [info ] [MainThread]: Concurrency: 6 threads (target='dev')
+[0m17:35:51.997866 [info ] [MainThread]: 
+[0m17:35:51.998884 [debug] [MainThread]: Acquiring new postgres connection 'master'
+[0m17:35:52.000124 [debug] [ThreadPool]: Acquiring new postgres connection 'list_eccom_db'
+[0m17:35:52.054998 [debug] [ThreadPool]: Using postgres connection "list_eccom_db"
+[0m17:35:52.055363 [debug] [ThreadPool]: On list_eccom_db: /* {"app": "dbt", "dbt_version": "1.11.2", "profile_name": "red_pandas_project", "target_name": "dev", "connection_name": "list_eccom_db"} */
+
+    select distinct nspname from pg_namespace
+  
+[0m17:35:52.055581 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:35:52.082198 [debug] [ThreadPool]: Postgres adapter: Got a retryable error when attempting to open a postgres connection.
+1 attempts remaining. Retrying in 0 seconds.
+Error:
+could not translate host name "postgres:15-alpine" to address: nodename nor servname provided, or not known
+
+[0m17:35:52.085290 [debug] [ThreadPool]: Postgres adapter: Error running SQL: /* {"app": "dbt", "dbt_version": "1.11.2", "profile_name": "red_pandas_project", "target_name": "dev", "connection_name": "list_eccom_db"} */
+
+    select distinct nspname from pg_namespace
+  
+[0m17:35:52.085538 [debug] [ThreadPool]: Postgres adapter: Rolling back transaction.
+[0m17:35:52.085777 [debug] [ThreadPool]: Postgres adapter: Error running SQL: macro list_schemas
+[0m17:35:52.085965 [debug] [ThreadPool]: Postgres adapter: Rolling back transaction.
+[0m17:35:52.086158 [debug] [ThreadPool]: On list_eccom_db: No close available on handle
+[0m17:35:52.086554 [debug] [MainThread]: Connection 'master' was properly closed.
+[0m17:35:52.086733 [debug] [MainThread]: Connection 'list_eccom_db' was properly closed.
+[0m17:35:52.086910 [info ] [MainThread]: 
+[0m17:35:52.087110 [info ] [MainThread]: Finished running  in 0 hours 0 minutes and 0.09 seconds (0.09s).
+[0m17:35:52.087399 [error] [MainThread]: Encountered an error:
+Database Error
+  could not translate host name "postgres:15-alpine" to address: nodename nor servname provided, or not known
+  
+[0m17:35:52.087747 [warn ] [MainThread]: [[33mWARNING[0m][DeprecationsSummary]: Deprecated functionality
+Summary of encountered deprecations:
+- MissingArgumentsPropertyInGenericTestDeprecation: 4 occurrences
+To see all deprecation instances instead of just the first occurrence of each,
+run command again with the `--show-all-deprecations` flag. You may also need to
+run with `--no-partial-parse` as some deprecations are only encountered during
+parsing.
+[0m17:35:52.090270 [debug] [MainThread]: Resource report: {"command_name": "seed", "command_success": false, "command_wall_clock_time": 9.300246, "process_in_blocks": "0", "process_kernel_time": 0.315977, "process_mem_max_rss": "141246464", "process_out_blocks": "0", "process_user_time": 2.149714}
+[0m17:35:52.090788 [debug] [MainThread]: Command `dbt seed` failed at 17:35:52.090707 after 9.30 seconds
+[0m17:35:52.091089 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107f67cb0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109db6870>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109df2d50>]}
+[0m17:35:52.091343 [debug] [MainThread]: Flushing usage events
+[0m17:35:53.067119 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m17:36:18.514250 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1104e6570>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x110d2ffb0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x110b669f0>]}
+
+
+============================== 17:36:18.517624 | aed1c824-d13a-4c1b-bca8-fdf10bb4b5b8 ==============================
+[0m17:36:18.517624 [info ] [MainThread]: Running with dbt=1.11.2
+[0m17:36:18.518445 [debug] [MainThread]: running dbt with arguments {'quiet': 'False', 'warn_error': 'None', 'send_anonymous_usage_stats': 'True', 'static_parser': 'True', 'version_check': 'True', 'indirect_selection': 'eager', 'invocation_command': 'dbt run', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'target_path': 'None', 'printer_width': '80', 'partial_parse': 'True', 'debug': 'False', 'no_print': 'None', 'empty': 'False', 'fail_fast': 'False', 'use_colors': 'True', 'log_format': 'default', 'use_experimental_parser': 'False', 'introspect': 'True', 'log_cache_events': 'False', 'log_path': '/Users/brendanwallace-nash/Documents/red_pandas_project/dbt/dbt/logs', 'profiles_dir': '/Users/brendanwallace-nash/.dbt', 'write_json': 'True', 'cache_selected_only': 'False'}
+[0m17:36:18.632391 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': 'aed1c824-d13a-4c1b-bca8-fdf10bb4b5b8', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x105799970>]}
+[0m17:36:18.670447 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'adapter_info', 'label': 'aed1c824-d13a-4c1b-bca8-fdf10bb4b5b8', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x110cea270>]}
+[0m17:36:18.671084 [info ] [MainThread]: Registered adapter: postgres=1.10.0
+[0m17:36:18.741658 [debug] [MainThread]: checksum: 3d40d8bbe1bef07db1c24822f2dbfff8bc07f2a48ed4fe2658a40653aec0b54b, vars: {}, profile: , target: , version: 1.11.2
+[0m17:36:18.832473 [debug] [MainThread]: Partial parsing enabled: 0 files deleted, 0 files added, 0 files changed.
+[0m17:36:18.832889 [debug] [MainThread]: Nothing changed, skipping partial parsing.
+[0m17:36:18.833127 [debug] [MainThread]: Partial parsing enabled, no changes found, skipping parsing
+[0m17:36:18.836969 [warn ] [MainThread]: [[33mWARNING[0m]: Configuration paths exist in your dbt_project.yml file which do not apply to any resources.
+There are 2 unused configuration paths:
+- models.red_pandas_project.marts
+- models.red_pandas_project.reporting
+[0m17:36:18.870164 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'load_project', 'label': 'aed1c824-d13a-4c1b-bca8-fdf10bb4b5b8', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x111246600>]}
+[0m17:36:18.933544 [debug] [MainThread]: Wrote artifact WritableManifest to /Users/brendanwallace-nash/Documents/red_pandas_project/dbt/dbt/target/manifest.json
+[0m17:36:18.935155 [debug] [MainThread]: Wrote artifact SemanticManifest to /Users/brendanwallace-nash/Documents/red_pandas_project/dbt/dbt/target/semantic_manifest.json
+[0m17:36:18.946834 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': 'aed1c824-d13a-4c1b-bca8-fdf10bb4b5b8', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x111acd130>]}
+[0m17:36:18.947201 [info ] [MainThread]: Found 4 models, 1 seed, 17 data tests, 2 sources, 464 macros
+[0m17:36:18.947521 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': 'aed1c824-d13a-4c1b-bca8-fdf10bb4b5b8', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1119fd8b0>]}
+[0m17:36:18.949132 [info ] [MainThread]: 
+[0m17:36:18.949438 [info ] [MainThread]: Concurrency: 6 threads (target='dev')
+[0m17:36:18.949706 [info ] [MainThread]: 
+[0m17:36:18.950172 [debug] [MainThread]: Acquiring new postgres connection 'master'
+[0m17:36:18.952937 [debug] [ThreadPool]: Acquiring new postgres connection 'list_eccom_db'
+[0m17:36:18.993528 [debug] [ThreadPool]: Using postgres connection "list_eccom_db"
+[0m17:36:18.993901 [debug] [ThreadPool]: On list_eccom_db: /* {"app": "dbt", "dbt_version": "1.11.2", "profile_name": "red_pandas_project", "target_name": "dev", "connection_name": "list_eccom_db"} */
+
+    select distinct nspname from pg_namespace
+  
+[0m17:36:18.994162 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:36:18.999154 [debug] [ThreadPool]: Postgres adapter: Got a retryable error when attempting to open a postgres connection.
+1 attempts remaining. Retrying in 0 seconds.
+Error:
+could not translate host name "postgres:15-alpine" to address: nodename nor servname provided, or not known
+
+[0m17:36:19.002563 [debug] [ThreadPool]: Postgres adapter: Error running SQL: /* {"app": "dbt", "dbt_version": "1.11.2", "profile_name": "red_pandas_project", "target_name": "dev", "connection_name": "list_eccom_db"} */
+
+    select distinct nspname from pg_namespace
+  
+[0m17:36:19.002871 [debug] [ThreadPool]: Postgres adapter: Rolling back transaction.
+[0m17:36:19.003149 [debug] [ThreadPool]: Postgres adapter: Error running SQL: macro list_schemas
+[0m17:36:19.003361 [debug] [ThreadPool]: Postgres adapter: Rolling back transaction.
+[0m17:36:19.003581 [debug] [ThreadPool]: On list_eccom_db: No close available on handle
+[0m17:36:19.004043 [debug] [MainThread]: Connection 'master' was properly closed.
+[0m17:36:19.004237 [debug] [MainThread]: Connection 'list_eccom_db' was properly closed.
+[0m17:36:19.004421 [info ] [MainThread]: 
+[0m17:36:19.004832 [info ] [MainThread]: Finished running  in 0 hours 0 minutes and 0.05 seconds (0.05s).
+[0m17:36:19.005242 [error] [MainThread]: Encountered an error:
+Database Error
+  could not translate host name "postgres:15-alpine" to address: nodename nor servname provided, or not known
+  
+[0m17:36:19.007138 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 0.5372118, "process_in_blocks": "0", "process_kernel_time": 0.263315, "process_mem_max_rss": "130531328", "process_out_blocks": "0", "process_user_time": 1.311798}
+[0m17:36:19.007486 [debug] [MainThread]: Command `dbt run` failed at 17:36:19.007425 after 0.54 seconds
+[0m17:36:19.007763 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1109c5f40>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x111fc2e70>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x111c6e150>]}
+[0m17:36:19.008011 [debug] [MainThread]: Flushing usage events
+[0m17:36:20.071593 [debug] [MainThread]: An error was encountered while trying to flush usage events
