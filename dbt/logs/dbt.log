@@ -14,3 +14,33 @@ Runtime Error
 [0m14:33:13.584189 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x106824200>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x102816d20>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1071446b0>]}
 [0m14:33:13.584408 [debug] [MainThread]: Flushing usage events
 [0m14:33:15.352444 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m14:41:09.374462 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x106651760>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107733fb0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107733da0>]}
+
+
+============================== 14:41:09.378347 | be2ff410-46b6-490b-8305-3815361e741e ==============================
+[0m14:41:09.378347 [info ] [MainThread]: Running with dbt=1.11.2
+[0m14:41:09.378786 [debug] [MainThread]: running dbt with arguments {'use_colors': 'True', 'quiet': 'False', 'indirect_selection': 'eager', 'debug': 'False', 'no_print': 'None', 'target_path': 'None', 'version_check': 'True', 'use_experimental_parser': 'False', 'cache_selected_only': 'False', 'printer_width': '80', 'invocation_command': 'dbt build', 'empty': 'False', 'log_path': '/Users/brendanwallace-nash/Documents/red_pandas_project/dbt/logs', 'fail_fast': 'False', 'log_format': 'default', 'partial_parse': 'True', 'introspect': 'True', 'profiles_dir': '/Users/brendanwallace-nash/.dbt', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'warn_error': 'None', 'static_parser': 'True', 'send_anonymous_usage_stats': 'True', 'write_json': 'True', 'log_cache_events': 'False'}
+[0m14:41:09.593232 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': 'be2ff410-46b6-490b-8305-3815361e741e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1079f2b40>]}
+[0m14:41:09.631521 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'adapter_info', 'label': 'be2ff410-46b6-490b-8305-3815361e741e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1074e5a00>]}
+[0m14:41:09.632408 [info ] [MainThread]: Registered adapter: postgres=1.10.0
+[0m14:41:09.742032 [debug] [MainThread]: checksum: 3d40d8bbe1bef07db1c24822f2dbfff8bc07f2a48ed4fe2658a40653aec0b54b, vars: {}, profile: , target: , version: 1.11.2
+[0m14:41:09.742665 [info ] [MainThread]: Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m14:41:09.743219 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'partial_parser', 'label': 'be2ff410-46b6-490b-8305-3815361e741e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107aadd60>]}
+[0m14:41:10.196165 [warn ] [MainThread]: [[33mWARNING[0m]: Configuration paths exist in your dbt_project.yml file which do not apply to any resources.
+There are 1 unused configuration paths:
+- models.red_pandas_project.example
+[0m14:41:10.199448 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'load_project', 'label': 'be2ff410-46b6-490b-8305-3815361e741e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107b8b950>]}
+[0m14:41:10.223211 [debug] [MainThread]: Wrote artifact WritableManifest to /Users/brendanwallace-nash/Documents/red_pandas_project/dbt/target/manifest.json
+[0m14:41:10.224764 [debug] [MainThread]: Wrote artifact SemanticManifest to /Users/brendanwallace-nash/Documents/red_pandas_project/dbt/target/semantic_manifest.json
+[0m14:41:10.249041 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': 'be2ff410-46b6-490b-8305-3815361e741e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1082eb590>]}
+[0m14:41:10.249386 [info ] [MainThread]: Found 464 macros
+[0m14:41:10.250351 [warn ] [MainThread]: Nothing to do. Try checking your model configs and model specification args
+[0m14:41:10.250711 [debug] [MainThread]: Command end result
+[0m14:41:10.262261 [debug] [MainThread]: Wrote artifact WritableManifest to /Users/brendanwallace-nash/Documents/red_pandas_project/dbt/target/manifest.json
+[0m14:41:10.263191 [debug] [MainThread]: Wrote artifact SemanticManifest to /Users/brendanwallace-nash/Documents/red_pandas_project/dbt/target/semantic_manifest.json
+[0m14:41:10.265207 [debug] [MainThread]: Wrote artifact RunExecutionResult to /Users/brendanwallace-nash/Documents/red_pandas_project/dbt/target/run_results.json
+[0m14:41:10.267147 [debug] [MainThread]: Resource report: {"command_name": "build", "command_success": true, "command_wall_clock_time": 0.939806, "process_in_blocks": "0", "process_kernel_time": 0.201333, "process_mem_max_rss": "125583360", "process_out_blocks": "0", "process_user_time": 1.574943}
+[0m14:41:10.267465 [debug] [MainThread]: Command `dbt build` succeeded at 14:41:10.267409 after 0.94 seconds
+[0m14:41:10.267702 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107764440>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107b8b020>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x106650380>]}
+[0m14:41:10.267927 [debug] [MainThread]: Flushing usage events
+[0m14:41:13.162790 [debug] [MainThread]: An error was encountered while trying to flush usage events

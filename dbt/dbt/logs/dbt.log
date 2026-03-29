@@ -44,3 +44,121 @@ Runtime Error
 [0m14:33:42.969701 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x110733da0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1102c7740>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1106e83b0>]}
 [0m14:33:42.970198 [debug] [MainThread]: Flushing usage events
 [0m14:33:44.780655 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m14:41:43.052521 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1087c38f0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x108933da0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x108933f50>]}
+
+
+============================== 14:41:43.056050 | 8e76f0ba-dfc3-4828-a2fd-f1d08ae009d7 ==============================
+[0m14:41:43.056050 [info ] [MainThread]: Running with dbt=1.11.2
+[0m14:41:43.056483 [debug] [MainThread]: running dbt with arguments {'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'invocation_command': 'dbt build', 'partial_parse': 'True', 'use_colors': 'True', 'cache_selected_only': 'False', 'printer_width': '80', 'quiet': 'False', 'version_check': 'True', 'static_parser': 'True', 'warn_error': 'None', 'no_print': 'None', 'use_experimental_parser': 'False', 'log_path': '/Users/brendanwallace-nash/Documents/red_pandas_project/dbt/dbt/logs', 'indirect_selection': 'eager', 'write_json': 'True', 'introspect': 'True', 'fail_fast': 'False', 'debug': 'False', 'profiles_dir': '/Users/brendanwallace-nash/.dbt', 'log_cache_events': 'False', 'log_format': 'default', 'send_anonymous_usage_stats': 'True', 'target_path': 'None', 'empty': 'False'}
+[0m14:41:43.168470 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': '8e76f0ba-dfc3-4828-a2fd-f1d08ae009d7', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x105ba1580>]}
+[0m14:41:43.206118 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'adapter_info', 'label': '8e76f0ba-dfc3-4828-a2fd-f1d08ae009d7', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x108d141a0>]}
+[0m14:41:43.206738 [info ] [MainThread]: Registered adapter: postgres=1.10.0
+[0m14:41:43.278605 [debug] [MainThread]: checksum: 3d40d8bbe1bef07db1c24822f2dbfff8bc07f2a48ed4fe2658a40653aec0b54b, vars: {}, profile: , target: , version: 1.11.2
+[0m14:41:43.279526 [info ] [MainThread]: Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m14:41:43.279798 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'partial_parser', 'label': '8e76f0ba-dfc3-4828-a2fd-f1d08ae009d7', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x108250830>]}
+[0m14:41:43.860953 [warn ] [MainThread]: [[33mWARNING[0m]: Did not find matching node for patch with name 'stg_customer' in the 'models' section of file 'models/staging/schema.yml'
+[0m14:41:43.862543 [warn ] [MainThread]: [[33mWARNING[0m]: Did not find matching node for patch with name 'stg_orders' in the 'models' section of file 'models/staging/schema.yml'
+[0m14:41:43.923525 [warn ] [MainThread]: [[33mWARNING[0m][MissingArgumentsPropertyInGenericTestDeprecation]: Deprecated
+functionality
+Found top-level arguments to test `accepted_values` defined on 'stg_customer' in
+package 'red_pandas_project' (models/staging/schema.yml). Arguments to generic
+tests should be nested under the `arguments` property.
+[0m14:41:43.923959 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'deprecation', 'label': '8e76f0ba-dfc3-4828-a2fd-f1d08ae009d7', 'property_': 'warn', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109a8ffe0>]}
+[0m14:41:44.025033 [error] [MainThread]: Encountered an error:
+Compilation Error
+  Model 'model.red_pandas_project.customer' (models/staging/customer.sql) depends on a source named 'raw.customer' which was not found
+[0m14:41:44.025602 [warn ] [MainThread]: [[33mWARNING[0m][DeprecationsSummary]: Deprecated functionality
+Summary of encountered deprecations:
+- MissingArgumentsPropertyInGenericTestDeprecation: 4 occurrences
+To see all deprecation instances instead of just the first occurrence of each,
+run command again with the `--show-all-deprecations` flag. You may also need to
+run with `--no-partial-parse` as some deprecations are only encountered during
+parsing.
+[0m14:41:44.027683 [debug] [MainThread]: Resource report: {"command_name": "build", "command_success": false, "command_wall_clock_time": 1.019957, "process_in_blocks": "0", "process_kernel_time": 0.212197, "process_mem_max_rss": "129941504", "process_out_blocks": "0", "process_user_time": 1.817611}
+[0m14:41:44.028013 [debug] [MainThread]: Command `dbt build` failed at 14:41:44.027953 after 1.02 seconds
+[0m14:41:44.028265 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x108933cb0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109b2bc50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1099a1160>]}
+[0m14:41:44.028505 [debug] [MainThread]: Flushing usage events
+[0m14:41:46.065426 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m14:44:32.460754 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x103cc9970>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x106833fb0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x106864200>]}
+
+
+============================== 14:44:32.464099 | 36223c7a-7894-4845-b923-440d0b826011 ==============================
+[0m14:44:32.464099 [info ] [MainThread]: Running with dbt=1.11.2
+[0m14:44:32.464531 [debug] [MainThread]: running dbt with arguments {'warn_error': 'None', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'version_check': 'True', 'target_path': 'None', 'static_parser': 'True', 'use_colors': 'True', 'use_experimental_parser': 'False', 'invocation_command': 'dbt build', 'indirect_selection': 'eager', 'partial_parse': 'True', 'log_format': 'default', 'no_print': 'None', 'log_cache_events': 'False', 'printer_width': '80', 'introspect': 'True', 'empty': 'False', 'cache_selected_only': 'False', 'profiles_dir': '/Users/brendanwallace-nash/.dbt', 'log_path': '/Users/brendanwallace-nash/Documents/red_pandas_project/dbt/dbt/logs', 'write_json': 'True', 'fail_fast': 'False', 'debug': 'False', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])'}
+[0m14:44:32.576192 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': '36223c7a-7894-4845-b923-440d0b826011', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1067ec740>]}
+[0m14:44:32.614705 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'adapter_info', 'label': '36223c7a-7894-4845-b923-440d0b826011', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1055963c0>]}
+[0m14:44:32.615399 [info ] [MainThread]: Registered adapter: postgres=1.10.0
+[0m14:44:32.687565 [debug] [MainThread]: checksum: 3d40d8bbe1bef07db1c24822f2dbfff8bc07f2a48ed4fe2658a40653aec0b54b, vars: {}, profile: , target: , version: 1.11.2
+[0m14:44:32.688511 [info ] [MainThread]: Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m14:44:32.688808 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'partial_parser', 'label': '36223c7a-7894-4845-b923-440d0b826011', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1067ec8c0>]}
+[0m14:44:33.261239 [warn ] [MainThread]: [[33mWARNING[0m]: Did not find matching node for patch with name 'stg_customer' in the 'models' section of file 'models/staging/schema.yml'
+[0m14:44:33.262774 [warn ] [MainThread]: [[33mWARNING[0m]: Did not find matching node for patch with name 'stg_orders' in the 'models' section of file 'models/staging/schema.yml'
+[0m14:44:33.320558 [warn ] [MainThread]: [[33mWARNING[0m][MissingArgumentsPropertyInGenericTestDeprecation]: Deprecated
+functionality
+Found top-level arguments to test `accepted_values` defined on 'stg_customer' in
+package 'red_pandas_project' (models/staging/schema.yml). Arguments to generic
+tests should be nested under the `arguments` property.
+[0m14:44:33.320965 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'deprecation', 'label': '36223c7a-7894-4845-b923-440d0b826011', 'property_': 'warn', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1076540e0>]}
+[0m14:44:33.417696 [warn ] [MainThread]: [[33mWARNING[0m]: Test 'test.red_pandas_project.unique_stg_customer_customer_id.310773d0ea' (models/staging/schema.yml) depends on a node named 'stg_customer' in package '' which was not found
+[0m14:44:33.418107 [warn ] [MainThread]: [[33mWARNING[0m]: Test 'test.red_pandas_project.not_null_stg_customer_customer_id.4721d3b88d' (models/staging/schema.yml) depends on a node named 'stg_customer' in package '' which was not found
+[0m14:44:33.418343 [warn ] [MainThread]: [[33mWARNING[0m]: Test 'test.red_pandas_project.not_null_stg_customer_state.26bb7274de' (models/staging/schema.yml) depends on a node named 'stg_customer' in package '' which was not found
+[0m14:44:33.418561 [warn ] [MainThread]: [[33mWARNING[0m]: Test 'test.red_pandas_project.accepted_values_stg_customer_state__NSW__VIC__QLD__SA__WA__TAS__NT__ACT.e697c50e77' (models/staging/schema.yml) depends on a node named 'stg_customer' in package '' which was not found
+[0m14:44:33.418766 [warn ] [MainThread]: [[33mWARNING[0m]: Test 'test.red_pandas_project.unique_stg_orders_order_id.e3b841c71a' (models/staging/schema.yml) depends on a node named 'stg_orders' in package '' which was not found
+[0m14:44:33.418966 [warn ] [MainThread]: [[33mWARNING[0m]: Test 'test.red_pandas_project.not_null_stg_orders_order_id.81cfe2fe64' (models/staging/schema.yml) depends on a node named 'stg_orders' in package '' which was not found
+[0m14:44:33.419166 [warn ] [MainThread]: [[33mWARNING[0m]: Test 'test.red_pandas_project.not_null_stg_orders_created_at.9740113cf3' (models/staging/schema.yml) depends on a node named 'stg_orders' in package '' which was not found
+[0m14:44:33.419359 [warn ] [MainThread]: [[33mWARNING[0m]: Test 'test.red_pandas_project.not_null_stg_orders_customer_id.af79d5e4b5' (models/staging/schema.yml) depends on a node named 'stg_orders' in package '' which was not found
+[0m14:44:33.419551 [warn ] [MainThread]: [[33mWARNING[0m]: Test 'test.red_pandas_project.relationships_stg_orders_customer_id__customer_id__ref_stg_customer_.fe26401f11' (models/staging/schema.yml) depends on a node named 'stg_customer' in package '' which was not found
+[0m14:44:33.419764 [warn ] [MainThread]: [[33mWARNING[0m]: Test 'test.red_pandas_project.relationships_stg_orders_customer_id__customer_id__ref_stg_customer_.fe26401f11' (models/staging/schema.yml) depends on a node named 'stg_orders' in package '' which was not found
+[0m14:44:33.419958 [warn ] [MainThread]: [[33mWARNING[0m]: Test 'test.red_pandas_project.not_null_stg_orders_order_quantity.a826ca2d21' (models/staging/schema.yml) depends on a node named 'stg_orders' in package '' which was not found
+[0m14:44:33.471586 [warn ] [MainThread]: [[33mWARNING[0m]: Configuration paths exist in your dbt_project.yml file which do not apply to any resources.
+There are 1 unused configuration paths:
+- models.red_pandas_project.example
+[0m14:44:33.479156 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'load_project', 'label': '36223c7a-7894-4845-b923-440d0b826011', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107b056a0>]}
+[0m14:44:33.536810 [debug] [MainThread]: Wrote artifact WritableManifest to /Users/brendanwallace-nash/Documents/red_pandas_project/dbt/dbt/target/manifest.json
+[0m14:44:33.538533 [debug] [MainThread]: Wrote artifact SemanticManifest to /Users/brendanwallace-nash/Documents/red_pandas_project/dbt/dbt/target/semantic_manifest.json
+[0m14:44:33.556583 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '36223c7a-7894-4845-b923-440d0b826011', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107b5fb30>]}
+[0m14:44:33.556955 [info ] [MainThread]: Found 2 models, 7 data tests, 2 sources, 464 macros
+[0m14:44:33.558492 [info ] [MainThread]: 
+[0m14:44:33.558740 [info ] [MainThread]: Concurrency: 6 threads (target='dev')
+[0m14:44:33.558949 [info ] [MainThread]: 
+[0m14:44:33.559262 [debug] [MainThread]: Acquiring new postgres connection 'master'
+[0m14:44:33.561869 [debug] [ThreadPool]: Acquiring new postgres connection 'list_eccom_db'
+[0m14:44:33.618959 [debug] [ThreadPool]: Using postgres connection "list_eccom_db"
+[0m14:44:33.619309 [debug] [ThreadPool]: On list_eccom_db: /* {"app": "dbt", "dbt_version": "1.11.2", "profile_name": "red_pandas_project", "target_name": "dev", "connection_name": "list_eccom_db"} */
+
+    select distinct nspname from pg_namespace
+  
+[0m14:44:33.619513 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m14:44:33.856451 [debug] [ThreadPool]: Postgres adapter: Got a retryable error when attempting to open a postgres connection.
+1 attempts remaining. Retrying in 0 seconds.
+Error:
+could not translate host name "postgres:15-alpine" to address: nodename nor servname provided, or not known
+
+[0m14:44:33.862559 [debug] [ThreadPool]: Postgres adapter: Error running SQL: /* {"app": "dbt", "dbt_version": "1.11.2", "profile_name": "red_pandas_project", "target_name": "dev", "connection_name": "list_eccom_db"} */
+
+    select distinct nspname from pg_namespace
+  
+[0m14:44:33.863315 [debug] [ThreadPool]: Postgres adapter: Rolling back transaction.
+[0m14:44:33.863935 [debug] [ThreadPool]: Postgres adapter: Error running SQL: macro list_schemas
+[0m14:44:33.864387 [debug] [ThreadPool]: Postgres adapter: Rolling back transaction.
+[0m14:44:33.864868 [debug] [ThreadPool]: On list_eccom_db: No close available on handle
+[0m14:44:33.865913 [debug] [MainThread]: Connection 'master' was properly closed.
+[0m14:44:33.866342 [debug] [MainThread]: Connection 'list_eccom_db' was properly closed.
+[0m14:44:33.866795 [info ] [MainThread]: 
+[0m14:44:33.867208 [info ] [MainThread]: Finished running  in 0 hours 0 minutes and 0.31 seconds (0.31s).
+[0m14:44:33.867813 [error] [MainThread]: Encountered an error:
+Database Error
+  could not translate host name "postgres:15-alpine" to address: nodename nor servname provided, or not known
+  
+[0m14:44:33.868548 [warn ] [MainThread]: [[33mWARNING[0m][DeprecationsSummary]: Deprecated functionality
+Summary of encountered deprecations:
+- MissingArgumentsPropertyInGenericTestDeprecation: 4 occurrences
+To see all deprecation instances instead of just the first occurrence of each,
+run command again with the `--show-all-deprecations` flag. You may also need to
+run with `--no-partial-parse` as some deprecations are only encountered during
+parsing.
+[0m14:44:33.872536 [debug] [MainThread]: Resource report: {"command_name": "build", "command_success": false, "command_wall_clock_time": 1.457833, "process_in_blocks": "0", "process_kernel_time": 0.245491, "process_mem_max_rss": "138838016", "process_out_blocks": "0", "process_user_time": 1.976497}
+[0m14:44:33.873127 [debug] [MainThread]: Command `dbt build` failed at 14:44:33.873018 after 1.46 seconds
+[0m14:44:33.873528 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107b666f0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107ba6420>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107b71ac0>]}
+[0m14:44:33.873928 [debug] [MainThread]: Flushing usage events
+[0m14:44:36.008141 [debug] [MainThread]: An error was encountered while trying to flush usage events

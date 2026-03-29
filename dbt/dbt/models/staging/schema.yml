@@ -1,10 +1,10 @@
 version: 2
 
 sources:
-  - name: staging
+  - name: raw 
     description: Raw data loaded by Go service from JSON files
     database: postgres  # Update with your database name
-    schema: staging
+    schema: raw 
     tables:
       - name: customer
         description: Customer information from source system
@@ -72,7 +72,7 @@ sources:
             tests:
               - not_null
               - relationships:
-                  to: source('staging', 'customer')
+                  to: source('raw', 'customer')
                   field: id
           
           - name: order_products
@@ -126,7 +126,7 @@ models:
         description: State code (validated and uppercase)
         tests:
           - not_null
-          - accepted_values:
+          - accepted_values: ## need to change this to be US states
               values: ['NSW', 'VIC', 'QLD', 'SA', 'WA', 'TAS', 'NT', 'ACT']
   
   - name: stg_orders

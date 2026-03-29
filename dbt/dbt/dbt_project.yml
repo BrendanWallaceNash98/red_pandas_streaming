@@ -1,0 +1,30 @@
+name: 'red_pandas_dbt'
+version: '1.0.0'
+config-version: 2
+
+
+profile: 'red_pandas_project'
+
+model-paths: ["models"]
+analysis-path: ["analyses"]
+test-paths: ["tests"]
+seed-path: ["seeds"]
+marco-paths: ["marcos"]
+snapshots-path: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "targets"
+  - "dbt_packages"
+
+models:
+  red_pandas_dbt:
+    staging:
+      +materialized: view
+      +schema: view
+    fact:
+      +materialized: table
+      +schema: fact
+    dimesnion:
+      +materialized: table
+      +schema: dimension
