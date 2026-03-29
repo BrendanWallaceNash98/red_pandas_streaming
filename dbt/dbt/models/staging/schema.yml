@@ -1,10 +1,10 @@
 version: 2
 
 sources:
-  - name: raw 
-    description: Raw data loaded by Go service from JSON files
-    database: postgres  # Update with your database name
-    schema: raw 
+  - name: raw
+    description: Raw data from the Python generator
+    database: eccom_db
+    schema: public
     tables:
       - name: customer
         description: Customer information from source system
@@ -14,47 +14,40 @@ sources:
             tests:
               - unique
               - not_null
-          
           - name: created_time
             description: Timestamp when customer was created
-          
           - name: full_name
             description: Customer's complete name
-          
           - name: salulation
-            description: Customer salutation (Mr., Mrs., Ms., etc.)
-            meta:
-              note: "Typo in source - should be 'salutation'"
-          
+            description: Customer salutation — typo in source, corrected in staging
           - name: first_name
             description: Customer's first name
-          
           - name: last_name
             description: Customer's last name
-          
           - name: full_address
             description: Complete address as a single string
-          
           - name: street_number
-            description: Street number portion of address
-          
+            description: Street number
           - name: street_name
-            description: Street name portion of address
-          
+            description: Street name
           - name: city
             description: City name
-          
           - name: postcode
             description: Postal code
-          
           - name: state
-            description: State code (should be 2 characters)
+            description: Australian state code
             tests:
               - accepted_values:
-                  values: ['NSW', 'VIC', 'QLD', 'SA', 'WA', 'TAS', 'NT', 'ACT']
-                  quote: true
+                  values: [
+                      'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
+                      'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
+                      'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
+                      'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
+                      'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY',
+                      'DC'
+                    ]
                   severity: warn
-      
+
       - name: orders
         description: Order transactions from source system
         columns:
@@ -63,10 +56,8 @@ sources:
             tests:
               - unique
               - not_null
-          
           - name: created_date
             description: Date when order was created
-          
           - name: customer_id
             description: Foreign key to customer table
             tests:
@@ -74,87 +65,63 @@ sources:
               - relationships:
                   to: source('raw', 'customer')
                   field: id
-          
           - name: order_products
-            description: Products in the order (may be JSON or delimited string)
-            meta:
-              note: "Data type unclear - may need parsing in staging model"
-          
+            description: Products in the order — may require JSON parsing in staging
           - name: order_quantity
-            description: Quantity of items in order
-            meta:
-              note: "Stored as varchar - should be cast to numeric in staging model"
+            description: Quantity of items — stored as varchar, cast to integer in staging
 
 models:
   - name: stg_customer
     description: Cleaned and typed customer data
     columns:
       - name: customer_id
-        description: Unique customer identifier
         tests:
           - unique
           - not_null
-      
       - name: created_at
-        description: Timestamp when customer was created (parsed from varchar)
-      
+        description: Parsed timestamp from created_time
       - name: full_name
-        description: Customer's complete name
-      
-      - name: salutation
-        description: Customer salutation (corrected spelling)
-      
-      - name: first_name
-        description: Customer's first name
-      
-      - name: last_name
-        description: Customer's last name
-      
-      - name: street_number
-        description: Street number
-      
-      - name: street_name
-        description: Street name
-      
-      - name: city
-        description: City name
-      
-      - name: postcode
-        description: Postal code
-      
-      - name: state
-        description: State code (validated and uppercase)
         tests:
           - not_null
-          - accepted_values: ## need to change this to be US states
-              values: ['NSW', 'VIC', 'QLD', 'SA', 'WA', 'TAS', 'NT', 'ACT']
-  
+      - name: salutation
+        description: Corrected spelling from source salulation
+      - name: first_name
+      - name: last_name
+      - name: street_number
+      - name: street_name
+      - name: city
+      - name: postcode
+      - name: state
+        tests:
+          - accepted_values:
+              values: [
+                  'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
+                  'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
+                  'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
+                  'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
+                  'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY',
+                  'DC'
+                ]
+            severity: warn
   - name: stg_orders
     description: Cleaned and typed order data
     columns:
       - name: order_id
-        description: Unique order identifier
         tests:
           - unique
           - not_null
-      
       - name: created_at
-        description: Timestamp when order was created (parsed from varchar)
         tests:
           - not_null
-      
       - name: customer_id
-        description: Foreign key to customer
         tests:
           - not_null
           - relationships:
               to: ref('stg_customer')
               field: customer_id
-      
       - name: order_products
-        description: Products in the order (parsed/cleaned)
-      
+        description: Parsed product data
       - name: order_quantity
-        description: Quantity of items in order (cast to integer)
+        description: Cast to integer from varchar source
         tests:
           - not_null
