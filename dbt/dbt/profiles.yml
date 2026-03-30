@@ -1,0 +1,12 @@
+red_pandas_project:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: localhost
+      port: 5332
+      user: admin
+      password: admin
+      dbname: postgres
+      schema: public
+      threads: 4

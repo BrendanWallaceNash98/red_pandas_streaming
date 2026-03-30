@@ -1,0 +1,167 @@
+version: 2
+
+sources:
+  - name: raw
+    description: Raw data loaded by the Go service into PostgreSQL
+    database: postgres
+    schema: raw 
+    tables:
+      - name: customer
+        description: Raw customer records from the Python generator
+        columns:
+          - name: id
+            description: Unique customer identifier
+            tests:
+              - unique
+              - not_null
+          - name: created_time
+            description: Timestamp when customer was created, stored as varchar
+          - name: full_name
+            description: Customer full name including salutation
+          - name: salulation
+            description: Customer salutation — typo in source, corrected in staging
+          - name: first_name
+            description: Customer first name
+          - name: last_name
+            description: Customer last name
+          - name: full_address
+            description: Complete address as a single string
+          - name: street_number
+            description: Street number portion of address
+          - name: street_name
+            description: Street name portion of address
+          - name: city
+            description: City name
+          - name: postcode
+            description: Postal code
+          - name: state
+            description: US state code
+            tests:
+              - accepted_values:
+                  values: [
+                    'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
+                    'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
+                    'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
+                    'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
+                    'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY',
+                    'DC'
+                  ]
+
+      - name: orders
+        description: Raw order records from the Python generator
+        columns:
+          - name: id
+            description: Unique order identifier
+            tests:
+              - unique
+              - not_null
+          - name: created_date
+            description: Timestamp when order was created, stored as varchar
+          - name: customer_id
+            description: Foreign key to customer table
+            tests:
+              - not_null
+              - relationships:
+                  to: source('raw', 'customer')
+                  field: id
+          - name: order_products
+            description: "JSON dict of product name to unit price e.g. {Mason Margiela Tabi Boots: 1500.0}"
+          - name: order_quantity
+            description: "JSON dict of product name to quantity e.g. {Mason Margiela Tabi Boots: 2}"
+
+models:
+  - name: stg_customer
+    description: Cleaned and typed customer data
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+      - name: created_at
+        description: Parsed timestamp from created_time
+      - name: full_name
+        tests:
+          - not_null
+      - name: salutation
+        description: Corrected spelling from source salulation
+      - name: first_name
+      - name: last_name
+      - name: street_number
+      - name: street_name
+      - name: city
+      - name: postcode
+      - name: state
+        tests:
+          - accepted_values:
+              values: [
+                'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
+                'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
+                'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
+                'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
+                'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY',
+                'DC'
+              ]
+
+  - name: stg_orders
+    description: Cleaned and typed order data
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: created_at
+        tests:
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customer')
+              field: customer_id
+      - name: order_products
+        description: Parsed jsonb from varchar source
+      - name: order_quantity
+        description: Parsed jsonb from varchar source
+
+  - name: stg_products
+    description: Cleaned product reference data from seed
+    columns:
+      - name: product_id
+        tests:
+          - unique
+          - not_null
+      - name: product_name
+        tests:
+          - unique
+          - not_null
+      - name: price
+        tests:
+          - not_null
+      - name: category
+        tests:
+          - not_null
+
+  - name: stg_order_lines
+    description: One row per order line item unpacked from order_products and order_quantity JSON
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+      - name: product_id
+        tests:
+          - not_null
+      - name: product_name
+        tests:
+          - not_null
+      - name: unit_price
+        tests:
+          - not_null
+      - name: quantity
+        tests:
+          - not_null
+      - name: line_total
+        tests:
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
