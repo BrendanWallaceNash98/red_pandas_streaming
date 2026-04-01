@@ -53,7 +53,7 @@ func (o *OrderRaw) ParseOrder() Order {
 	order.CreatedTime = o.CreatedTime
 	order.CustomerId = o.Id
 	order.OrderQuantity = string(o.RawOrderQuantity)
-	order.OrderQuantity = string(o.RawOrderProducts)
+	order.OrderProducts = string(o.RawOrderProducts)
 	return order
 }
 

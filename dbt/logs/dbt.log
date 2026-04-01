@@ -44,3 +44,43 @@ There are 1 unused configuration paths:
 [0m14:41:10.267702 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107764440>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107b8b020>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x106650380>]}
 [0m14:41:10.267927 [debug] [MainThread]: Flushing usage events
 [0m14:41:13.162790 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m21:17:09.369888 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107fe8c80>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x113182060>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x113182030>]}
+
+
+============================== 21:17:11.563744 | a7ae5dd1-ad0e-44a4-83d7-7e547849148d ==============================
+[0m21:17:11.563744 [info ] [MainThread]: Running with dbt=1.11.2
+[0m21:17:11.566904 [debug] [MainThread]: running dbt with arguments {'use_colors': 'True', 'warn_error': 'None', 'static_parser': 'True', 'write_json': 'True', 'introspect': 'True', 'use_experimental_parser': 'False', 'printer_width': '80', 'cache_selected_only': 'False', 'quiet': 'False', 'invocation_command': 'dbt debug', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'log_path': 'logs', 'version_check': 'True', 'empty': 'None', 'fail_fast': 'False', 'target_path': 'None', 'indirect_selection': 'eager', 'debug': 'False', 'send_anonymous_usage_stats': 'True', 'profiles_dir': '/Users/brendanwallace-nash/.dbt', 'log_format': 'default', 'no_print': 'None', 'partial_parse': 'True', 'log_cache_events': 'False'}
+[0m21:17:11.583254 [info ] [MainThread]: dbt version: 1.11.2
+[0m21:17:11.583606 [info ] [MainThread]: python version: 3.12.3
+[0m21:17:11.583843 [info ] [MainThread]: python path: /Library/Frameworks/Python.framework/Versions/3.12/bin/python3
+[0m21:17:11.584172 [info ] [MainThread]: os info: macOS-26.2-arm64-arm-64bit
+[0m21:17:11.589740 [info ] [MainThread]: Error importing adapter: No module named 'dbt.adapters.bigquery'
+[0m21:17:11.631909 [info ] [MainThread]: Using profiles dir at /Users/brendanwallace-nash/.dbt
+[0m21:17:11.632212 [info ] [MainThread]: Using profiles.yml file at /Users/brendanwallace-nash/.dbt/profiles.yml
+[0m21:17:11.632739 [info ] [MainThread]: Using dbt_project.yml file at /Users/brendanwallace-nash/Documents/red_pandas_project/dbt/dbt_project.yml
+[0m21:17:11.633176 [info ] [MainThread]: Configuration:
+[0m21:17:11.633482 [info ] [MainThread]:   profiles.yml file [[31mERROR invalid[0m]
+[0m21:17:11.633737 [info ] [MainThread]:   dbt_project.yml file [[31mERROR not found[0m]
+[0m21:17:11.633919 [info ] [MainThread]: Required dependencies:
+[0m21:17:11.634147 [debug] [MainThread]: Executing "git --help"
+[0m21:17:11.657720 [debug] [MainThread]: STDOUT: "b"usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]\n           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]\n           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]\n           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]\n           [--super-prefix=<path>] [--config-env=<name>=<envvar>]\n           <command> [<args>]\n\nThese are common Git commands used in various situations:\n\nstart a working area (see also: git help tutorial)\n   clone     Clone a repository into a new directory\n   init      Create an empty Git repository or reinitialize an existing one\n\nwork on the current change (see also: git help everyday)\n   add       Add file contents to the index\n   mv        Move or rename a file, a directory, or a symlink\n   restore   Restore working tree files\n   rm        Remove files from the working tree and from the index\n\nexamine the history and state (see also: git help revisions)\n   bisect    Use binary search to find the commit that introduced a bug\n   diff      Show changes between commits, commit and working tree, etc\n   grep      Print lines matching a pattern\n   log       Show commit logs\n   show      Show various types of objects\n   status    Show the working tree status\n\ngrow, mark and tweak your common history\n   branch    List, create, or delete branches\n   commit    Record changes to the repository\n   merge     Join two or more development histories together\n   rebase    Reapply commits on top of another base tip\n   reset     Reset current HEAD to the specified state\n   switch    Switch branches\n   tag       Create, list, delete or verify a tag object signed with GPG\n\ncollaborate (see also: git help workflows)\n   fetch     Download objects and refs from another repository\n   pull      Fetch from and integrate with another repository or a local branch\n   push      Update remote refs along with associated objects\n\n'git help -a' and 'git help -g' list available subcommands and some\nconcept guides. See 'git help <command>' or 'git help <concept>'\nto read about a specific subcommand or concept.\nSee 'git help git' for an overview of the system.\n""
+[0m21:17:11.658793 [debug] [MainThread]: STDERR: "b''"
+[0m21:17:11.659124 [info ] [MainThread]:  - git [[32mOK found[0m]
+
+[0m21:17:11.659414 [info ] [MainThread]: Connection test skipped since no profile was found
+[0m21:17:11.659800 [info ] [MainThread]: [31m2 checks failed:[0m
+[0m21:17:11.660039 [info ] [MainThread]: Could not load dbt_project.yml
+Profile loading failed for the following reason:
+Runtime Error
+  Credentials in profile "dbt_bq_project", target "dev" invalid: Runtime Error
+    Could not find adapter type bigquery!
+
+
+[0m21:17:11.660305 [info ] [MainThread]: Project loading failed for the following reason:
+ project path </Users/brendanwallace-nash/Documents/red_pandas_project/dbt/dbt_project.yml> not found
+
+[0m21:17:11.663386 [debug] [MainThread]: Resource report: {"command_name": "debug", "command_success": false, "command_wall_clock_time": 2.342891, "process_in_blocks": "0", "process_kernel_time": 0.203664, "process_mem_max_rss": "115703808", "process_out_blocks": "0", "process_user_time": 0.975495}
+[0m21:17:11.663908 [debug] [MainThread]: Command `dbt debug` failed at 21:17:11.663833 after 2.34 seconds
+[0m21:17:11.664309 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x114977c50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x114965a30>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1148e88c0>]}
+[0m21:17:11.664652 [debug] [MainThread]: Flushing usage events
+[0m21:17:12.918392 [debug] [MainThread]: An error was encountered while trying to flush usage events
