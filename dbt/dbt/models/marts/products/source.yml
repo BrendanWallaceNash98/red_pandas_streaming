@@ -1,0 +1,23 @@
+version: '2'
+
+models:
+  - name: dim_products
+    description: One row per product from the seed file
+    columns:
+      - name: product_id
+        description: Primary key
+        tests:
+          - unique
+          - not_null
+      - name: product_name
+        tests:
+          - unique
+          - not_null
+      - name: category
+        tests:
+          - not_null
+          ## - accepted_values:
+          ##   values: ['footwear', 'outerwear', 'tops', 'bottoms']
+      - name: list_price
+        tests:
+          - not_null

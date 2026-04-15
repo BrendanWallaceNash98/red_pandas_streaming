@@ -1,0 +1,39 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: One row per customer with order summary metrics
+    columns:
+      - name: customer_id
+        description: Primary key
+        tests:
+          - unique
+          - not_null
+      - name: created_at
+        tests:
+          - not_null
+      - name: full_name
+        tests:
+          - not_null
+      - name: salutation
+      - name: first_name
+      - name: last_name
+      - name: street_number
+      - name: street_name
+      - name: city
+      - name: postcode
+      - name: state
+      - name: full_address
+      - name: total_orders
+        tests:
+          - not_null
+      - name: total_items_ordered
+        tests:
+          - not_null
+      - name: first_order_at
+      - name: last_order_at
+      - name: customer_segment
+        tests:
+          - not_null
+          ##- accepted_values:
+          ##    values: ['no_orders', 'new', 'returning', 'loyal']
