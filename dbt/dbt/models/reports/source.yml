@@ -1,0 +1,156 @@
+version: 2
+
+models:
+  - name: rpt_daily_sales
+    description: Daily sales summary with order counts, revenue, and average order value
+    columns:
+      - name: report_date
+        description: The date for this sales period
+        tests:
+          - unique
+          - not_null
+      - name: total_orders
+        tests:
+          - not_null
+      - name: total_revenue
+        tests:
+          - not_null
+      - name: total_items_sold
+        tests:
+          - not_null
+      - name: avg_order_value
+        tests:
+          - not_null
+
+  - name: rpt_monthly_sales
+    description: Monthly sales summary for trend analysis
+    columns:
+      - name: month
+        description: The month for this sales period
+        tests:
+          - unique
+          - not_null
+      - name: total_orders
+        tests:
+          - not_null
+      - name: total_revenue
+        tests:
+          - not_null
+
+  - name: rpt_customer_rfm
+    description: RFM (Recency, Frequency, Monetary) customer segmentation
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+      - name: full_name
+      - name: recency_days
+        tests:
+          - not_null
+      - name: order_frequency
+        tests:
+          - not_null
+      - name: total_spent
+        tests:
+          - not_null
+      - name: rfm_segment
+        tests:
+          - not_null
+
+  - name: rpt_product_performance
+    description: Product-level performance metrics including revenue, quantity, and order count
+    columns:
+      - name: product_id
+        tests:
+          - unique
+          - not_null
+      - name: product_name
+        tests:
+          - not_null
+      - name: category
+        tests:
+          - not_null
+      - name: total_quantity_sold
+        tests:
+          - not_null
+      - name: total_revenue
+        tests:
+          - not_null
+      - name: total_orders
+        tests:
+          - not_null
+      - name: avg_unit_price
+        tests:
+          - not_null
+
+  - name: rpt_category_performance
+    description: Category-level aggregation of sales performance
+    columns:
+      - name: category
+        tests:
+          - unique
+          - not_null
+      - name: total_revenue
+        tests:
+          - not_null
+      - name: total_quantity_sold
+        tests:
+          - not_null
+      - name: total_orders
+        tests:
+          - not_null
+      - name: unique_products_sold
+        tests:
+          - not_null
+
+  - name: rpt_customer_lifetime_value
+    description: Customer LTV with total spend, order count, and average order value per customer
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+      - name: full_name
+        tests:
+          - not_null
+      - name: total_orders
+        tests:
+          - not_null
+      - name: total_spent
+        tests:
+          - not_null
+      - name: avg_order_value
+        tests:
+          - not_null
+      - name: first_order_at
+        tests:
+          - not_null
+      - name: last_order_at
+        tests:
+          - not_null
+      - name: customer_tenure_days
+        tests:
+          - not_null
+
+  - name: rpt_geographic_sales
+    description: Sales performance broken down by state and city
+    columns:
+      - name: state
+        tests:
+          - not_null
+      - name: city
+        tests:
+          - not_null
+      - name: total_orders
+        tests:
+          - not_null
+      - name: total_revenue
+        tests:
+          - not_null
+      - name: unique_customers
+        tests:
+          - not_null
+      - name: avg_order_value
+        tests:
+          - not_null
