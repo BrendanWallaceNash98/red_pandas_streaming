@@ -3,10 +3,10 @@ red_pandas_project:
   outputs:
     dev:
       type: postgres
-      host: localhost
-      port: 5332
+      host: postgres
+      port: 5432
       user: admin
       password: admin
-      dbname: postgres
+      dbname: eccom_db
       schema: public
       threads: 4
