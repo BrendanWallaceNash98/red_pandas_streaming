@@ -1,7 +1,15 @@
 version: "3.8"
 
+networks:
+  data-pipeline:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  duckdb_data:
+
 services:
-  # PostgreSQL Database
+  # ─── PostgreSQL (operational OLTP database) ───
   postgres:
     image: postgres:15-alpine
     container_name: postgres
@@ -25,17 +33,17 @@ services:
       timeout: 5s
       retries: 5
 
-  # Python Order Generator
+  # ─── Python Order Generator (produces JSON files) ───
   python-generator:
     build:
       context: ./python-generator
       dockerfile: Dockerfile
     container_name: order-generator
     environment:
-      DATABASE_URL: postgresql://admin:admin@postgres:5432/eccom_db
+      GO_INGESTER_URL: http://go-ingester:8086/api/orders
       GENERATE_INTERVAL: 5
     depends_on:
-      postgres:
+      go-ingester:
         condition: service_healthy
     volumes:
       - ./python-generator:/app
@@ -43,38 +51,36 @@ services:
       - data-pipeline
     restart: unless-stopped
 
-  # DBT for transformations
-  dbt:
+  # ─── Go Ingestor (receives from Python, writes to Postgres + Redpanda) ───
+  go-ingester:
     build:
-      context: ./dbt
+      context: ./go-ingester
       dockerfile: Dockerfile
-    container_name: dbt
+    container_name: go-ingester
     environment:
-      DBT_PROFILES_DIR: /root/.dbt
       DATABASE_URL: postgresql://admin:admin@postgres:5432/eccom_db
+      KAFKA_BROKERS: redpanda:9092
+      SCHEMA_REGISTRY_URL: http://redpanda:8081
+      PORT: 8086
+    ports:
+      - "8086:8086"
     depends_on:
       postgres:
         condition: service_healthy
+      redpanda:
+        condition: service_healthy
     volumes:
-      - ./dbt:/dbt
-      - ./dbt/profiles.yml:/root/.dbt/profiles.yml
+      - ./go-ingester:/app
     networks:
       - data-pipeline
-    command: ["dbt", "run"]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8086/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  # Zookeeper (required for Kafka)
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.5.0
-    container_name: zookeeper
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - "2181:2181"
-    networks:
-      - data-pipeline
-
-  # Redpanda (Kafka alternative - simpler, no Zookeeper needed)
+  # ─── Redpanda (CDC + event streaming) ───
   redpanda:
     image: docker.redpanda.com/redpandadata/redpanda:latest
     container_name: redpanda
@@ -100,28 +106,12 @@ services:
     networks:
       - data-pipeline
     healthcheck:
-      test:
-        ["CMD-SHELL", "rpk cluster health | grep -E 'Healthy:.+true' || exit 1"]
-      interval: 15s
-      timeout: 3s
+      test: ["CMD-SHELL", "rpk topic list || exit 1"]
+      interval: 10s
+      timeout: 5s
       retries: 5
 
-  # Redpanda Console (UI for Redpanda)
-  redpanda-console:
-    image: docker.redpanda.com/redpandadata/console:latest
-    container_name: redpanda-console
-    environment:
-      KAFKA_BROKERS: redpanda:9092
-      KAFKA_SCHEMAREGISTRY_ENABLED: true
-      KAFKA_SCHEMAREGISTRY_URLS: http://redpanda:8081
-    ports:
-      - "8080:8080"
-    depends_on:
-      - redpanda
-    networks:
-      - data-pipeline
-
-  # Debezium (CDC from Postgres)
+  # ─── Debezium CDC (Postgres → Redpanda) ───
   debezium:
     image: debezium/connect:2.4
     container_name: debezium
@@ -131,6 +121,7 @@ services:
       CONFIG_STORAGE_TOPIC: debezium_configs
       OFFSET_STORAGE_TOPIC: debezium_offsets
       STATUS_STORAGE_TOPIC: debezium_status
+      OFFSET_FLUSH_INTERVAL_MS: 1000
     ports:
       - "8083:8083"
     depends_on:
@@ -138,6 +129,8 @@ services:
         condition: service_healthy
       redpanda:
         condition: service_healthy
+    volumes:
+      - ./debezium-connector-config.json:/etc/debezium/connector-config.json
     networks:
       - data-pipeline
     healthcheck:
@@ -146,91 +139,81 @@ services:
       timeout: 5s
       retries: 5
 
-  # Debezium UI (optional - for easier management)
-  debezium-ui:
-    image: debezium/debezium-ui:2.4
-    container_name: debezium-ui
-    environment:
-      KAFKA_CONNECT_URIS: http://debezium:8083
-    ports:
-      - "8084:8080"
-    depends_on:
-      - debezium
-    networks:
-      - data-pipeline
-
-  # Golang WebSocket Server
-  go-websocket:
+  # ─── DuckDB Consumer (reads Redpanda, writes DuckDB) ───
+  duckdb-consumer:
     build:
-      context: ./go-websocket
+      context: ./duckdb-consumer
       dockerfile: Dockerfile
-    container_name: go-websocket
+    container_name: duckdb-consumer
     environment:
       KAFKA_BROKERS: redpanda:9092
-      KAFKA_TOPIC: postgres.public.orders
-      PORT: 8085
-    ports:
-      - "8085:8085"
+      KAFKA_TOPIC: eccom_db.public.orders
+      DUCKDB_PATH: /data/orders.db
+      SCHEMA_REGISTRY_URL: http://redpanda:8081
     depends_on:
       redpanda:
         condition: service_healthy
-      debezium:
-        condition: service_healthy
+    volumes:
+      - duckdb_data:/data
     networks:
       - data-pipeline
     restart: unless-stopped
 
-  # Frontend
+  # ─── DuckDB API (exposes DuckDB to frontend via HTTP) ───
+  duckdb-api:
+    build:
+      context: ./duckdb-api
+      dockerfile: Dockerfile
+    container_name: duckdb-api
+    environment:
+      DUCKDB_PATH: /data/orders.db
+      PORT: 8090
+    ports:
+      - "8090:8090"
+    volumes:
+      - duckdb_data:/data
+    depends_on:
+      duckdb-consumer:
+        condition: service_healthy
+    networks:
+      - data-pipeline
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8090/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── DBT (transformations on PostgreSQL) ───
+  dbt:
+    build:
+      context: ./dbt
+      dockerfile: Dockerfile
+    container_name: dbt
+    volumes:
+      - ./dbt/dbt:/dbt
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DBT_PROFILES_DIR: /dbt
+    networks:
+      - data-pipeline
+    command: ["dbt", "run"]
+
+  # ─── Frontend (queries DuckDB API for analytics) ───
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: frontend
     environment:
-      WEBSOCKET_URL: ws://go-websocket:8085/ws
-      API_URL: http://go-websocket:8085/api
+      DUCKDB_API_URL: http://duckdb-api:8090
     ports:
       - "3000:3000"
     depends_on:
-      - go-websocket
-    networks:
-      - data-pipeline
-    restart: unless-stopped
-
-  # Init container to set up Debezium connector
-  debezium-init:
-    image: curlimages/curl:latest
-    container_name: debezium-init
-    depends_on:
-      debezium:
+      duckdb-api:
         condition: service_healthy
     networks:
       - data-pipeline
-    command: >
-      sh -c "
-        sleep 10 &&
-        curl -i -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' \
-        http://debezium:8083/connectors/ -d '{
-          \"name\": \"postgres-connector\",
-          \"config\": {
-            \"connector.class\": \"io.debezium.connector.postgresql.PostgresConnector\",
-            \"database.hostname\": \"postgres\",
-            \"database.port\": \"5432\",
-            \"database.user\": \"admin\",
-            \"database.password\": \"admin\",
-            \"database.dbname\": \"eccom_db\",
-            \"database.server.name\": \"postgres\",
-            \"table.include.list\": \"public.orders\",
-            \"plugin.name\": \"pgoutput\",
-            \"topic.prefix\": \"postgres\"
-          }
-        }'
-      "
-    restart: "no"
-
-networks:
-  data-pipeline:
-    driver: bridge
-
-volumes:
-  postgres_data:
+    restart: unless-stopped
