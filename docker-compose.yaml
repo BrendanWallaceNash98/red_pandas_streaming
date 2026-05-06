@@ -139,6 +139,29 @@ services:
       timeout: 5s
       retries: 5
 
+  # ─── Debezium Init (auto-deploy connector on startup) ───
+  debezium-init:
+    image: curlimages/curl:latest
+    container_name: debezium-init
+    depends_on:
+      debezium:
+        condition: service_healthy
+    volumes:
+      - ./debezium-connector-config.json:/config.json
+    networks:
+      - data-pipeline
+    command: >
+      sh -c "
+        echo 'Waiting for Debezium...' &&
+        until curl -s http://debezium:8083/ | grep -q kafka; do sleep 2; done &&
+        echo 'Debezium is ready, deploying connector...' &&
+        curl -i -X POST -H 'Content-Type: application/json' \\
+          -d @/config.json \\
+          http://debezium:8083/connectors &&
+        echo 'Connector deployed.'
+      "
+    restart: "no"
+
   # ─── DuckDB Consumer (reads Redpanda, writes DuckDB) ───
   duckdb-consumer:
     build:
