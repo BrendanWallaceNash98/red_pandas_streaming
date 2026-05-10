@@ -33,15 +33,11 @@ geo as (
 
 select
     g.*,
-
-    -- Revenue share within state
     round(
         (g.total_revenue * 100.0) /
         (select sum(total_revenue) from geo)::numeric,
         2
     ) as revenue_share_pct,
-
-    -- Rank by revenue
     rank() over (partition by g.state order by g.total_revenue desc) as city_revenue_rank,
     rank() over (order by g.total_revenue desc) as overall_revenue_rank
 

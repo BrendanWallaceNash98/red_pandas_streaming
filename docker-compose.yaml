@@ -28,7 +28,7 @@ services:
       - "-c"
       - "wal_level=logical"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin"]
+      test: ["CMD-SHELL", "pg_isready -U admin -d eccom_db"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -207,24 +207,23 @@ services:
       timeout: 5s
       retries: 5
 
+    # ─── DBT (transformations on PostgreSQL) ───
   # ─── DBT (transformations on PostgreSQL) ───
   dbt:
     build:
       context: ./dbt
       dockerfile: Dockerfile
+    platform: linux/amd64
     container_name: dbt
-    volumes:
-      - ./dbt/dbt:/dbt
     depends_on:
       postgres:
         condition: service_healthy
     environment:
-      DBT_PROFILES_DIR: /dbt
+      DBT_PROFILES_DIR: /usr/app/dbt
     networks:
       - data-pipeline
-    command: ["dbt", "run"]
-
-  # ─── Frontend (queries DuckDB API for analytics) ───
+    command: ["run", "--no-partial-parse", "--project-dir", "/usr/app/dbt"] 
+    # ─── Frontend (queries DuckDB API for analytics) ───
   frontend:
     build:
       context: ./frontend

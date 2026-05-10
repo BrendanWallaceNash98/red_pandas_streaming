@@ -26,7 +26,6 @@ select
     total_revenue,
     total_items_sold,
     avg_order_value,
-    -- Rolling metrics for trend analysis
     sum(total_revenue) over (order by month)        as cumulative_revenue,
     sum(total_orders) over (order by month)         as cumulative_orders
 from monthly

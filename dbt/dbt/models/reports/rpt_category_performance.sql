@@ -29,22 +29,16 @@ category_metrics as (
 
 select
     cm.*,
-
-    -- Revenue share by category
     round(
         (cm.total_revenue * 100.0) /
         (select sum(total_revenue) from category_metrics)::numeric,
         2
     ) as revenue_share_pct,
-
-    -- Quantity share by category
     round(
         (cm.total_quantity_sold * 100.0) /
         (select sum(total_quantity_sold) from category_metrics)::numeric,
         2
     ) as quantity_share_pct,
-
-    -- Rank by revenue
     rank() over (order by total_revenue desc) as revenue_rank
 
 from category_metrics cm

@@ -26,19 +26,12 @@ product_metrics as (
 
 select
     pm.*,
-
-    -- Revenue share
     round(
         (pm.total_revenue * 100.0) /
         (select sum(total_revenue) from product_metrics)::numeric,
         2
     ) as revenue_share_pct,
-
-    -- Rank by revenue
     rank() over (order by total_revenue desc) as revenue_rank,
-
-    -- Rank by quantity
     rank() over (order by total_quantity_sold desc) as quantity_rank
-
 from product_metrics pm
 order by total_revenue desc

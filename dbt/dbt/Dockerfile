@@ -1,4 +1,3 @@
 FROM ghcr.io/dbt-labs/dbt-postgres:1.9.latest
-USER root
+COPY dbt/ /usr/app/dbt/
 WORKDIR /usr/app/dbt
-COPY dbt/ .
